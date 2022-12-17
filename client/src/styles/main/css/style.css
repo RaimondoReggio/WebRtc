@@ -1,0 +1,134 @@
+/**
+* Contain typography variables
+* Contain fonts
+* IMPORTANT: Only Raimondo can changes this file
+*/
+/* ---------------------------------------------- Font Family ---------------------------------------------- */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,400;1,500;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap");
+/* ---------------------------------------------- Font Size ------------------------------------------------ */
+/* ---------------------------------------------- Define Style ---------------------------------------------- */
+h1 {
+  font-size: 4rem;
+  font-weight: bold;
+  font-family: "Quicksand", sans-serif;
+  text-align: center; }
+
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: "Quicksand", sans-serif;
+  text-align: center; }
+
+h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: "Quicksand", sans-serif;
+  text-align: center; }
+
+h4 {
+  font-size: 0.5rem;
+  font-weight: bold;
+  font-family: "Quicksand", sans-serif;
+  text-align: center; }
+
+p {
+  font-size: 15px;
+  font-family: "Montserrat", sans-serif; }
+  p.small {
+    font-size: 10px; }
+  p.large {
+    font-size: 20px; }
+
+/**
+* Contain typography variables
+* Contain fonts
+*/
+.loading-container .ant-spin-dot .ant-spin-dot-item {
+  background-color: #03CBB6; }
+
+.loading-container .ant-spin-text {
+  color: #03CBB6; }
+
+.home-container .ant-layout-header {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px; }
+  .home-container .ant-layout-header .logo {
+    height: 120px;
+    display: flex;
+    justify-content: center; }
+
+.home-container main {
+  height: calc(100vh - 120px);
+  background-color: #fff; }
+  .home-container main .home-content {
+    height: 100%; }
+    .home-container main .home-content .home-row {
+      height: 100%;
+      align-items: center; }
+      .home-container main .home-content .home-row .image-container {
+        height: 100%;
+        display: flex; }
+        .home-container main .home-content .home-row .image-container .image {
+          display: flex;
+          justify-content: center;
+          margin-left: 20px; }
+          .home-container main .home-content .home-row .image-container .image img {
+            width: 90%; }
+      .home-container main .home-content .home-row .login-container .login-content {
+        padding-left: 7rem;
+        padding-right: 7rem; }
+        .home-container main .home-content .home-row .login-container .login-content .title {
+          display: flex;
+          justify-content: center; }
+          .home-container main .home-content .home-row .login-container .login-content .title h1 {
+            font-size: 4rem;
+            margin-bottom: 0; }
+        .home-container main .home-content .home-row .login-container .login-content .subtitle {
+          margin-bottom: 4rem; }
+          .home-container main .home-content .home-row .login-container .login-content .subtitle p {
+            font-size: 20px;
+            text-align: center; }
+        .home-container main .home-content .home-row .login-container .login-content .login-button button {
+          width: 40%;
+          color: #fff;
+          background-color: #03CBB6; }
+
+.register-container {
+  display: flex; }
+  .register-container .register-content {
+    width: 60%;
+    height: 60%; }
+    .register-container .register-content .title {
+      text-align: center; }
+      .register-container .register-content .title h1 {
+        font-size: 3rem;
+        margin-bottom: 10px; }
+    .register-container .register-content .subtitle {
+      text-align: center;
+      margin-bottom: 3rem; }
+    .register-container .register-content .container-card {
+      display: flex;
+      justify-content: center; }
+      .register-container .register-content .container-card .ant-card {
+        width: 50%;
+        border: 0.5px solid #03CBB6; }
+        .register-container .register-content .container-card .ant-card .field {
+          text-align: center; }
+          .register-container .register-content .container-card .ant-card .field input {
+            border-color: #03CBB6; }
+          .register-container .register-content .container-card .ant-card .field .ant-select .ant-select-selector {
+            border-color: #03CBB6; }
+        .register-container .register-content .container-card .ant-card .username-field p {
+          margin-top: 0; }
+        .register-container .register-content .container-card .ant-card .learn-l-field {
+          margin-bottom: 2rem; }
+        .register-container .register-content .container-card .ant-card .button-send {
+          padding-left: 20px;
+          padding-right: 20px; }
+          .register-container .register-content .container-card .ant-card .button-send button {
+            background-color: #03CBB6;
+            color: #fff; }
