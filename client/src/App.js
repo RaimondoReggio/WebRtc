@@ -5,6 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import ProtectedRoutes from './general/auth/protected-route';
 import Register from './routes/Register';
 import Loading from './general/loading';
+import WaitingRoom from './general/waiting-room';
 import './styles/main/css/style.css';
 
 function App() {
@@ -19,7 +20,9 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<Home />}/>
+        <Route path="/waiting" element={<ProtectedRoutes><WaitingRoom /></ProtectedRoutes>} />
         <Route path="/register" element={<ProtectedRoutes><Register /></ProtectedRoutes>} />
+        <Route path="/userpage" element={<ProtectedRoutes><Profile/></ProtectedRoutes>} />
       </Routes>
     </div>
   );

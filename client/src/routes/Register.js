@@ -1,11 +1,51 @@
 import logo from '../assets/logo/logo.png';
-import { Row, Card, Select, Input, Button, Layout } from "antd";
+import { Row, Card, Select, Input, Button, Layout, message } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
-import React from "react";
-
+import React, { useState } from "react";
+import Axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useNavigate } from 'react-router-dom';
 
 
 function Register() {
+    const [username, setUsername] = useState('');
+    const [native_l, setNative_l] = useState('');
+    const [new_l, setNew_l] = useState('');
+
+    const { getAccessTokenSilently } = useAuth0();
+    const navigate = useNavigate();
+
+    const createUser = async() => {
+        
+        const token = await getAccessTokenSilently();
+        console.log(token);
+        
+
+        await Axios.get("http://localhost:4000/registerUser", {
+            params: {
+                username: username,
+                native_l: native_l,
+                new_l: new_l,
+            },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((response) => {
+            if(response.data.registered) {
+                navigate('/userpage');
+            } else {
+                alert(response.data.message);
+            }
+        })
+    }
+
+    const changeNativeL = (value) => {
+        setNative_l(value['label']);
+    }
+
+    const changeNewL = (value) => {
+        setNew_l(value['label']);
+    }
 
     return (
         <Layout className='home-container'>
@@ -27,13 +67,16 @@ function Register() {
                         <Card bordered={false}>
                             <div className="field username-field">
                                 <p>Choose your username</p>
-                                <Input placeholder="default size" style={{width: 200}}/>
+                                <Input id="username-input" placeholder="default size" onChange={e => setUsername(e.target.value)} style={{width: 200}}/>
                             </div>
                             <div className="field native-l-field">
                                 <p>Select your native language</p>
                                 <Select
                                     showSearch
+                                    labelInValue
                                     style={{ width: 200 }}
+                                    id = "native-l-input"
+                                    onChange={changeNativeL}
                                     placeholder="Select your native language"
                                     optionFilterProp="children"
                                     filterOption={(input, option) => (option?.label ?? '').includes(input)}
@@ -72,7 +115,10 @@ function Register() {
                                 <p>Select the language that you want to learn</p>
                                 <Select
                                     showSearch
+                                    labelInValue
                                     style={{ width: 200 }}
+                                    id = "new-l-input"
+                                    onChange={changeNewL}
                                     placeholder="Select the language that you want to learn"
                                     optionFilterProp="children"
                                     filterOption={(input, option) => (option?.label ?? '').includes(input)}
@@ -108,7 +154,7 @@ function Register() {
                                     />
                             </div>
                             <div className="button-send">
-                                <Button type="primary" block>Save</Button>
+                                <Button type="primary" onClick={() => createUser()} block>Save</Button>
                             </div>
                         </Card>
                     </div>
