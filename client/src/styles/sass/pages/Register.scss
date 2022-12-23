@@ -1,0 +1,61 @@
+.register-container {
+	display: flex;
+	margin-top: 4rem;
+	.register-content {
+		width: 60%;
+		height: 60%;
+		.title {
+			text-align: center;
+			h1 {
+				font-size: 3rem;
+				margin-bottom: 10px;
+			}
+		}
+		.subtitle {
+			text-align: center;
+			margin-bottom: 3rem;
+		}
+		.container-card {
+			display: flex;
+			justify-content: center;
+			.ant-card {
+				width: 500px;
+				height: 355px;
+				border: 0.5px solid $green;
+				.ant-card-body {
+					.field {
+						text-align: center;
+						margin-bottom: 1rem;
+						input {
+							border-color: $green;
+						}
+						.ant-select {
+							.ant-select-selector {
+								border-color: $green;
+							}
+						}
+						p {
+							margin-bottom: 0.5rem;
+						}
+					}
+					.username-field {
+						p {
+							margin-top: 0;
+						}
+					}
+					.learn-l-field {
+						margin-bottom: 2rem;
+					}
+					.button-send {
+						padding-left: 20px;
+						padding-right: 20px;
+						button {
+							background-color: $green;
+							color: $white;
+						}
+					}
+				}
+			}
+		}
+	}
+}

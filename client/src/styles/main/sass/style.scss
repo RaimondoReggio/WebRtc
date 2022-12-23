@@ -1,0 +1,14 @@
+// Import variables
+@import '../../sass/variables/typography';
+@import '../../sass/variables/colors';
+
+
+//Import components style
+@import '../../sass/components/loading.scss';
+@import '../../sass/components/header.scss';
+@import '../../sass/components/content.scss';
+
+//Import pages style
+@import '../../sass/pages/Home.scss';
+@import '../../sass/pages/Register.scss';
+@import '../../sass/pages/UserPage.scss';

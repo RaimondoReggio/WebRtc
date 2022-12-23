@@ -1,0 +1,76 @@
+/**
+* Contain typography variables
+* Contain fonts
+* IMPORTANT: Only Raimondo can changes this file
+*/
+
+/* ---------------------------------------------- Font Family ---------------------------------------------- */
+
+// Montserrat
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,400;1,500;1,700&display=swap');
+$montserrat: 'Montserrat', sans-serif;
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;700&display=swap');
+$quicksand: 'Quicksand', sans-serif;
+
+/* ---------------------------------------------- Font Size ------------------------------------------------ */
+
+// Title
+$h1size: 4rem; //64px
+$h2size: 2rem; //32px
+$h3size: 1rem; //16px
+$h4size: 0.5rem; //8px;
+
+// Paragraph
+$pSizeLarge: 20px;
+$pSizeDefault: 15px;
+$pSizeSmall: 10px;
+
+
+/* ---------------------------------------------- Define Style ---------------------------------------------- */
+
+
+h1, h2, h3, h4, p {
+    color: #000;
+}
+
+h1 {
+    font-size: $h1size;
+    font-weight: bold!important;
+    font-family: $quicksand;
+    text-align: center;
+}
+
+h2 {
+    font-size: $h2size;
+    font-weight: bold!important;
+    font-family: $quicksand;
+    text-align: center;
+}
+
+h3 {
+    font-size: $h3size;
+    font-weight: bold!important;
+    font-family: $quicksand;
+    text-align: center;
+}
+
+h4 {
+    font-size: $h4size;
+    font-weight: bold!important;
+    font-family: $quicksand;
+    text-align: center;
+}
+
+
+p {
+    font-size: $pSizeDefault;
+    font-family: $montserrat;
+    margin-bottom: 0;
+    &.small {
+        font-size: $pSizeSmall;
+    }
+    &.large {
+        font-size: $pSizeLarge;
+    }
+}
