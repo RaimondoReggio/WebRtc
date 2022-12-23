@@ -2,9 +2,9 @@ import logo from '../assets/logo/logo.png';
 import { Row, Card, Select, Input, Button, Layout, message } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
 import React, { useState } from "react";
-import Axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 function Register() {
@@ -15,45 +15,40 @@ function Register() {
     const { getAccessTokenSilently } = useAuth0();
     const navigate = useNavigate();
 
+    // Create a new user on click on submit buttom 
     const createUser = async() => {
         
         const token = await getAccessTokenSilently();
-        console.log(token);
-        
 
-        await Axios.get("http://localhost:4000/registerUser", {
-            params: {
-                username: username,
-                native_l: native_l,
-                new_l: new_l,
-            },
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        await axios({method: 'post', url: 'http://localhost:4000/registerUser', 
+            headers: {'Authorization': `Bearer ${token}`}, 
+            params : {username: username, native_l: native_l, new_l: new_l } 
         }).then((response) => {
             if(response.data.registered) {
                 navigate('/userpage');
             } else {
                 alert(response.data.message);
             }
-        })
+        });
     }
 
+    // Set native language value when the select changes
     const changeNativeL = (value) => {
         setNative_l(value['label']);
     }
 
+    // Set new language value when the select changes
     const changeNewL = (value) => {
         setNew_l(value['label']);
     }
 
     return (
         <Layout className='home-container'>
-            <Header>
+            <div className='layout-header'>
                 <div className='logo'>
                 <img src={logo} alt="logo"/>
                 </div>
-            </Header>
+            </div>
         <Content>
             <Row className="register-container" justify={'center'}>
                 <div className="register-content">

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Row, Spin } from "antd";
 import Axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
@@ -31,9 +30,11 @@ const WaitingRoom = () => {
 
 
     return (
-        <Row className="loading-container" align={"middle"} justify={"center"} style={{height: '100vh'}}>
-            <Spin tip="Loading" size="large" />
-        </Row>
+        <div className="loading-container row align-items-center justify-content-center" style={{height: '100vh'}}>
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     );
 }
 

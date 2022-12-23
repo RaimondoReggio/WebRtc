@@ -1,12 +1,13 @@
-import { Row, Spin } from "antd";
 import React from "react";
 
 
 const Loading = () => {
     return (
-        <Row className="loading-container" align={"middle"} justify={"center"} style={{height: '100vh'}}>
-            <Spin tip="Loading" size="large" />
-        </Row>
+        <div className="loading-container row align-items-center justify-content-center" style={{height: '100vh'}}>
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
     );
 }
 

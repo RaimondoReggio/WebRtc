@@ -22,12 +22,13 @@ const {jwtCheck} = require('./modules/jwt');
 // Return an error message if the jwt isn
 app.use(jwtCheck, function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
+        
         res.status(401).send('invalid token...');
     }
 });
 
 // Checks if user exist
-app.get('/checkIfUserExist', jwtCheck, async(req, res) => {
+app.get('/checkIfUserExist', async(req, res) => {
     const user_id = req.auth.sub;
 
     const result = await checkIfUserExist(user_id);
@@ -36,16 +37,12 @@ app.get('/checkIfUserExist', jwtCheck, async(req, res) => {
 });
 
 // Registers user on MongoDb
-app.get('/registerUser', jwtCheck, async(req, res) => {
+app.post('/registerUser', async(req, res) => {
 
-    const user_id = req.auth.sub;
+    const user_id = req.auth.sub; 
 
-    console.log(req.query);
-    const {native_l, new_l} = req.query; 
+    const {native_l, new_l} = req.query;  
     const username = req.query.username;
-    console.log(username);
-    console.log(native_l);
-    console.log(new_l);
     var message = "Unsuccessfull registration";
 
     const result = await createUser(user_id, username, native_l, new_l);
