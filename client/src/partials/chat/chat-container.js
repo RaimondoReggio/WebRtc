@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import ChatInput from './chat-input';
 
 import axios from 'axios';
-import { addMessageRoute, getAllMessagesRoute } from '../utiles/APIRputes';
 import {v4 as uuidv4} from 'uuid';
 
 
@@ -17,7 +16,7 @@ export default function ChatContainer({currentChat ,currentUser,socket}) {
 
     useEffect(() => {
         async function fetchData() {
-          
+
             const token = await getAccessTokenSilently();
 
             await axios({method: 'post', url: BASE_URL+"/getAllMsgs", 
@@ -31,15 +30,20 @@ export default function ChatContainer({currentChat ,currentUser,socket}) {
         fetchData();
       }, [currentChat]);
 
+      //il from lo leviamo, poichè anche la socket.io avrà il jwt, quindi
+      //node aggiungerà il from lato server
  const handleSendMsg = async (msg) =>{
-     const data= await axios.post(addMessageRoute,{
-        from:currentUser._id,
-        to:currentChat._id,
-        message:msg,
-    });
+
+      const token = await getAccessTokenSilently();
+
+      await axios({method: 'post', url: BASE_URL+"/addMsg", 
+          headers: {'Authorization': `Bearer ${token}`}, 
+          params : { to:currentChat.id, message:msg} //il from se lo vede node dal token
+      });
+
+
     socket.current.emit("send-msg",{
-      from:currentUser._id,
-      to:currentChat._id,
+      to:currentChat.id,
       message:msg,
     });
 
@@ -80,7 +84,6 @@ export default function ChatContainer({currentChat ,currentUser,socket}) {
             </div>
            
         </div>
-        <LOgOut />
     </div>
     <div className='chat-messages' >
       
