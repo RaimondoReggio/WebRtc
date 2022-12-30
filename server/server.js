@@ -1,8 +1,14 @@
 const express = require('express');
-const http = require('http');
+const http = require('https');
 const cors = require('cors');
+var fs = require('fs');
 const port = 4000;
 const socket = require("socket.io");
+
+var privateKey  = fs.readFileSync('C:/Windows/System32/cert.key', 'utf8');
+var certificate = fs.readFileSync('C:/Windows/System32/cert.crt', 'utf8');
+
+var credentials = {key: privateKey, cert: certificate};
 
 const app = express();
 app.use(express.json());
@@ -17,7 +23,9 @@ app.use(
     })
 );
 
-const server =  app.listen(port ,()=>{
+const server = http.createServer(credentials, app);
+
+server.listen(port ,()=>{
     console.log(`Server connected successfully on Port  ${port}.`);
 });
 
