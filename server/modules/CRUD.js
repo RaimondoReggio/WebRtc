@@ -25,9 +25,11 @@ const findDocuments = async (coll, query, options) => {
 
     try {
         const collection = database.collection(coll);
-        const result = await collection.find(query, options);
+        const result = collection.find(query, options);
+        
+        const result_array = await result.toArray();
 
-        return result;
+        return result_array;
     } catch(e) {
         console.error(e);
     }

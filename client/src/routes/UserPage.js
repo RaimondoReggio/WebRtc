@@ -1,15 +1,65 @@
-import React, { useState } from "react";
-import logoBlack from '../assets/logo/logo_nero.svg'
+import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Header from "../general/header";
 import Content from "../general/content";
-import { Select } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVenusMars, faCakeCandles, faEarthAmerica, faHouseUser, faBriefcase} from "@fortawesome/free-solid-svg-icons";
+import Axios from "axios";
 
 const Profile = () => {
+
+    // User data Auth0
     const { user } = useAuth0();
-    const { nickname, picture, email } = user;
+
+    // Server API url
+    const BASE_URL = process.env.REACT_APP_SERVER_URL;
+
+    // Gets token
+    const {getAccessTokenSilently} = useAuth0();
+
+    // User variables
+    const [avatar_image, setAvatarImage] = useState();
+    const [username, setUsername] = useState();
+    const [biography, setBiography] = useState();
+    const [gender, setGender] = useState();
+    const [birth_date, setBirthDate] = useState();
+    const [birth_country, setBirthCountry] = useState();
+    const [job, setJob] = useState();
+    const [first_name, setFirstName] = useState();
+    const [last_name, setLasttName] = useState();
+    const [native_l, setNative_l] = useState();
+    const [new_l, setNew_l] = useState();
+    const { email } = user;
+
+
+    // Retrives all user data
+    const getUserData = async() => {
+        const token = await getAccessTokenSilently();
+
+        await Axios.get(BASE_URL+'/getUserData', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }).then((response) => {
+            if(response.data) {
+                setAvatarImage(response.data.avatar_image);
+                setUsername(response.data.username);
+                setBiography(response.data.biography);
+                setGender(response.data.gender);
+                setBirthDate(response.data.birth_date);
+                setBirthCountry(response.data.birth_country);
+                setJob(response.data.job);
+                setFirstName(response.data.first_name);
+                setLasttName(response.data.last_name);
+                setNative_l(response.data.native_l);
+                setNew_l(response.data.new_l);
+            }
+        });
+    };
+
+    useEffect(() => {
+        getUserData();
+    });
 
     return (
         <>
@@ -21,9 +71,9 @@ const Profile = () => {
                         <div className="col-lg-4">
                         <div className="card user-card mb-4">
                             <div className="card-body text-center">
-                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" className="rounded-circle img-fluid" style={{width: '150px'}} />
-                            <h5 className="my-3">Profyeye</h5>
-                            <p className="text-muted mb-4">I love travel and I would like to go in USA</p>
+                            <img src={avatar_image} alt="avatar" className="rounded-circle img-fluid" style={{width: '150px'}} />
+                            <h5 className="my-3">{username}</h5>
+                            <p className="text-muted mb-4">{biography}</p>
                             <div className="d-flex justify-content-center mb-2">
                                 <button type="button" className="btn btn-primary btn-msg">Message</button>
                                 <button type="button" className="btn btn-outline-primary btn-like ms-1">Like</button>
@@ -35,19 +85,19 @@ const Profile = () => {
                             <ul className="list-group list-group-flush rounded-3">
                                 <li className="list-group-item d-flex justify-content-between align-items-center p-3 selected">
                                 <FontAwesomeIcon icon={faVenusMars} />
-                                <p className="mb-0">Male</p>
+                                <p className="mb-0">{gender}</p>
                                 </li>
                                 <li className="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <FontAwesomeIcon icon={faCakeCandles} />
-                                <p className="mb-0">22-Dec-1999</p>
+                                <p className="mb-0">{birth_date}</p>
                                 </li>
                                 <li className="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <FontAwesomeIcon icon={faEarthAmerica} />
-                                <p className="mb-0">Italy</p>
+                                <p className="mb-0">{birth_country}</p>
                                 </li>
                                 <li className="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <FontAwesomeIcon icon={faBriefcase} />
-                                <p className="mb-0">Student</p>
+                                <p className="mb-0">{job}</p>
                                 </li>
                             </ul>
                             </div>
@@ -61,7 +111,7 @@ const Profile = () => {
                                 <p className="mb-0">Full Name</p>
                                 </div>
                                 <div className="col-sm-9">
-                                <p className="text-muted mb-0">Reggio Raimondo</p>
+                                <p className="text-muted mb-0">{first_name + ' ' + last_name}</p>
                                 </div>
                             </div>
                             <hr />
@@ -70,7 +120,7 @@ const Profile = () => {
                                 <p className="mb-0">Email</p>
                                 </div>
                                 <div className="col-sm-9">
-                                <p className="text-muted mb-0">reggioraimondo@gmail.com</p>
+                                <p className="text-muted mb-0">{email}</p>
                                 </div>
                             </div>
                             <hr />
@@ -79,7 +129,7 @@ const Profile = () => {
                                 <p className="mb-0">Wants to teach</p>
                                 </div>
                                 <div className="col-sm-9">
-                                <p className="text-muted mb-0">Italian</p>
+                                <p className="text-muted mb-0">{native_l}</p>
                                 </div>
                             </div>
                             <hr />
@@ -88,7 +138,7 @@ const Profile = () => {
                                 <p className="mb-0">Wants to learn</p>
                                 </div>
                                 <div className="col-sm-9">
-                                <p className="text-muted mb-0">English</p>
+                                <p className="text-muted mb-0">{new_l}</p>
                                 </div>
                             </div>
                             <hr />

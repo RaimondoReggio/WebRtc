@@ -9,7 +9,7 @@ const WaitingRoom = () => {
 
     useEffect(() => {
         alreadyReagister();
-    });
+    }, []);
 
     // Check if user sign up or sign is the first time
     const alreadyReagister = async() => {

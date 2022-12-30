@@ -74,6 +74,10 @@ nav.nav-header {
     nav.nav-header .navbar-nav .nav-item svg {
       margin-right: 0.5rem; }
 
+.ant-dropdown-menu .ant-dropdown-menu-item .ant-dropdown-menu-title-content button {
+  border: 0;
+  background-color: transparent; }
+
 .content {
   height: calc(100vh - 80px); }
   .content .container {
@@ -132,46 +136,100 @@ nav.nav-header {
           border: 0;
           border-radius: 5px; }
 
-.register-container {
-  display: flex;
-  margin-top: 4rem; }
-  .register-container .register-content {
-    width: 60%;
-    height: 60%; }
-    .register-container .register-content .title {
-      text-align: center; }
-      .register-container .register-content .title h1 {
-        font-size: 3rem;
-        margin-bottom: 10px; }
-    .register-container .register-content .subtitle {
-      text-align: center;
-      margin-bottom: 3rem; }
-    .register-container .register-content .container-card {
+#register-page {
+  height: 100vh; }
+  #register-page .register-content {
+    height: 100%; }
+    #register-page .register-content .card {
+      width: 80%;
+      position: relative;
+      left: 5rem;
+      position: relative;
+      height: 554px; }
+      #register-page .register-content .card .logo-container {
+        position: absolute;
+        top: -4rem; }
+        #register-page .register-content .card .logo-container img {
+          width: 100px; }
+      #register-page .register-content .card .card-header h2 {
+        color: #03CBB6; }
+      #register-page .register-content .card .card-body {
+        padding-left: 4rem;
+        padding-right: 4rem;
+        display: flex;
+        justify-content: center; }
+        #register-page .register-content .card .card-body .card-body-content {
+          width: 100%; }
+          #register-page .register-content .card .card-body .card-body-content .form-outline .ant-select {
+            width: 100%; }
+          #register-page .register-content .card .card-body .card-body-content .form-outline .ant-picker {
+            width: 100%; }
+          #register-page .register-content .card .card-body .card-body-content .button-next-container {
+            display: flex;
+            justify-content: end;
+            position: absolute;
+            right: 4rem;
+            bottom: 20px; }
+            #register-page .register-content .card .card-body .card-body-content .button-next-container button {
+              background-color: #03CBB6;
+              color: #fff; }
+              #register-page .register-content .card .card-body .card-body-content .button-next-container button:hover {
+                border-color: #03CBB6; }
+          #register-page .register-content .card .card-body .card-body-content .button-back-container {
+            display: flex;
+            justify-content: end;
+            position: absolute;
+            right: 9rem;
+            bottom: 20px; }
+            #register-page .register-content .card .card-body .card-body-content .button-back-container button {
+              background-color: #03CBB6;
+              color: #fff; }
+              #register-page .register-content .card .card-body .card-body-content .button-back-container button:hover {
+                border-color: #03CBB6; }
+          #register-page .register-content .card .card-body .card-body-content .button-save-container {
+            display: flex;
+            justify-content: end;
+            position: absolute;
+            right: 4rem;
+            bottom: 20px; }
+            #register-page .register-content .card .card-body .card-body-content .button-save-container button {
+              background-color: #03CBB6;
+              color: #fff; }
+              #register-page .register-content .card .card-body .card-body-content .button-save-container button:hover {
+                border-color: #03CBB6; }
+          #register-page .register-content .card .card-body .card-body-content .user-avatar-choiche-button {
+            border: 0;
+            background-color: transparent; }
+            #register-page .register-content .card .card-body .card-body-content .user-avatar-choiche-button .ant-avatar {
+              border: 1px solid #000; }
+    #register-page .register-content .step-container {
+      background-color: #03CBB6;
+      height: 100%;
       display: flex;
-      justify-content: center; }
-      .register-container .register-content .container-card .ant-card {
-        width: 500px;
-        height: 355px;
-        border: 0.5px solid #03CBB6; }
-        .register-container .register-content .container-card .ant-card .ant-card-body .field {
-          text-align: center;
-          margin-bottom: 1rem; }
-          .register-container .register-content .container-card .ant-card .ant-card-body .field input {
-            border-color: #03CBB6; }
-          .register-container .register-content .container-card .ant-card .ant-card-body .field .ant-select .ant-select-selector {
-            border-color: #03CBB6; }
-          .register-container .register-content .container-card .ant-card .ant-card-body .field p {
-            margin-bottom: 0.5rem; }
-        .register-container .register-content .container-card .ant-card .ant-card-body .username-field p {
-          margin-top: 0; }
-        .register-container .register-content .container-card .ant-card .ant-card-body .learn-l-field {
-          margin-bottom: 2rem; }
-        .register-container .register-content .container-card .ant-card .ant-card-body .button-send {
-          padding-left: 20px;
-          padding-right: 20px; }
-          .register-container .register-content .container-card .ant-card .ant-card-body .button-send button {
-            background-color: #03CBB6;
+      align-items: center; }
+      #register-page .register-content .step-container .ant-steps {
+        height: 500px;
+        position: relative;
+        top: 75px;
+        left: 40px; }
+        #register-page .register-content .step-container .ant-steps .ant-steps-item.ant-steps-item-active .ant-steps-item-icon {
+          background-color: #03CBB6;
+          border-color: #03CBB6; }
+        #register-page .register-content .step-container .ant-steps .ant-steps-item.ant-steps-item-wait .ant-steps-item-icon {
+          background-color: #fff; }
+        #register-page .register-content .step-container .ant-steps .ant-steps-item.ant-steps-item-finish .ant-steps-item-icon {
+          background-color: #03CBB6;
+          border-color: #03CBB6; }
+          #register-page .register-content .step-container .ant-steps .ant-steps-item.ant-steps-item-finish .ant-steps-item-icon .ant-steps-icon {
             color: #fff; }
+        #register-page .register-content .step-container .ant-steps .ant-steps-item .ant-steps-item-icon {
+          box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.3); }
+        #register-page .register-content .step-container .ant-steps .ant-steps-item .ant-steps-item-tail::after {
+          background-color: transparent; }
+        #register-page .register-content .step-container .ant-steps .ant-steps-item .ant-steps-item-content .ant-steps-item-title {
+          color: #fff; }
+        #register-page .register-content .step-container .ant-steps .ant-steps-item .ant-steps-item-content .ant-steps-item-description {
+          color: #fff; }
 
 .user-page-container .user-card .btn-msg {
   background-color: #03CBB6; }

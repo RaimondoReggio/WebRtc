@@ -2,12 +2,13 @@ import { Routes, Route} from 'react-router-dom'
 import Home from './routes/Home';
 import Profile from './routes/UserPage';
 import { useAuth0 } from '@auth0/auth0-react';
-import Header from './general/header';
 import ProtectedRoutes from './general/auth/protected-route';
 import Register from './routes/Register';
 import Loading from './general/loading';
 import WaitingRoom from './general/waiting-room';
 import './styles/main/css/style.css';
+import ProtectedRoutesUser from './general/auth/protected-route-user';
+import Chat from './routes/Chat';
 
 function App() {
 
@@ -23,7 +24,8 @@ function App() {
         <Route path="/" element={<Home />}/>
         <Route path="/waiting" element={<ProtectedRoutes><WaitingRoom /></ProtectedRoutes>} />
         <Route path="/register" element={<ProtectedRoutes><Register /></ProtectedRoutes>} />
-        <Route path="/userpage" element={<ProtectedRoutes><Profile/></ProtectedRoutes>} />
+        <Route path="/userpage" element={<ProtectedRoutesUser><Chat/></ProtectedRoutesUser>} />
+        <Route path="/chat" element={<ProtectedRoutesUser><Chat/></ProtectedRoutesUser>} />
       </Routes>
     </div>
   );

@@ -27,3 +27,13 @@ nav.nav-header {
         }
     }
 }
+.ant-dropdown-menu {
+    .ant-dropdown-menu-item {
+        .ant-dropdown-menu-title-content {
+            button {
+                border: 0;
+                background-color: transparent;
+            }
+        }
+    }
+}

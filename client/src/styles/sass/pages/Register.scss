@@ -1,56 +1,134 @@
-.register-container {
-	display: flex;
-	margin-top: 4rem;
+#register-page {
+	height: 100vh;
 	.register-content {
-		width: 60%;
-		height: 60%;
-		.title {
-			text-align: center;
-			h1 {
-				font-size: 3rem;
-				margin-bottom: 10px;
+		height: 100%;
+		.card {
+			width: 80%;
+			position: relative;
+			left: 5rem;
+			position: relative;
+			height: 554px;
+			.logo-container {
+				position: absolute;
+				top: -4rem;
+				img {
+					width: 100px;
+				}
 			}
-		}
-		.subtitle {
-			text-align: center;
-			margin-bottom: 3rem;
-		}
-		.container-card {
-			display: flex;
-			justify-content: center;
-			.ant-card {
-				width: 500px;
-				height: 355px;
-				border: 0.5px solid $green;
-				.ant-card-body {
-					.field {
-						text-align: center;
-						margin-bottom: 1rem;
-						input {
-							border-color: $green;
-						}
+			.card-header {
+				h2 {
+					color: $green;
+				}
+			}
+			.card-body {
+				padding-left: 4rem;
+				padding-right: 4rem;
+				display: flex;
+				justify-content: center;
+				.card-body-content {
+					width: 100%;
+					.form-outline {
 						.ant-select {
-							.ant-select-selector {
+							width: 100%;
+						}
+						.ant-picker {
+							width: 100%;
+						}
+					}
+					.button-next-container {
+						display: flex;
+						justify-content: end;
+						position: absolute;
+						right: 4rem;
+						bottom: 20px;
+						button {
+							background-color: $green;
+							color: $white;
+							&:hover {
 								border-color: $green;
 							}
 						}
-						p {
-							margin-bottom: 0.5rem;
-						}
 					}
-					.username-field {
-						p {
-							margin-top: 0;
-						}
-					}
-					.learn-l-field {
-						margin-bottom: 2rem;
-					}
-					.button-send {
-						padding-left: 20px;
-						padding-right: 20px;
+					.button-back-container {
+						display: flex;
+						justify-content: end;
+						position: absolute;
+						right: 9rem;
+						bottom: 20px;
 						button {
 							background-color: $green;
+							color: $white;
+							&:hover {
+								border-color: $green;
+							}
+						}
+					}
+					.button-save-container {
+						display: flex;
+						justify-content: end;
+						position: absolute;
+						right: 4rem;
+						bottom: 20px;
+						button {
+							background-color: $green;
+							color: $white;
+							&:hover {
+								border-color: $green;
+							}
+						}
+					}
+					.user-avatar-choiche-button {
+						border: 0;
+						background-color: transparent;
+						.ant-avatar {
+							border: 1px solid #000;
+						}
+					}
+				}
+			}
+		}
+		.step-container {
+			background-color: $green;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			.ant-steps {
+				height: 500px;
+				position: relative;
+				top: 75px;
+				left: 40px;
+				.ant-steps-item {
+					&.ant-steps-item-active {
+						.ant-steps-item-icon {
+							background-color: $green;
+							border-color: $green;
+						}
+					}
+					&.ant-steps-item-wait {
+						.ant-steps-item-icon {
+							background-color: $white;
+						}
+					}
+					&.ant-steps-item-finish {
+						.ant-steps-item-icon {
+							background-color: $green;
+							border-color: $green;
+							.ant-steps-icon {
+								color: $white;
+							}
+						}
+					}
+					.ant-steps-item-icon {
+						box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.3);
+					}
+					.ant-steps-item-tail::after {
+						background-color: transparent;
+					}
+					.ant-steps-item-content {
+						.ant-steps-item-title {
+							color: $white;
+						}
+						.ant-steps-item-description {
 							color: $white;
 						}
 					}
