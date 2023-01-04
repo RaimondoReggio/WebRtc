@@ -16,9 +16,9 @@ const Header = () => {
     {
         key: '1',
         label: (
-        <a target="_blank" rel="noopener noreferrer">
-            <button>Profile</button>
-        </a>
+
+            <button onClick={()=>navigate("/userpage")}>Profile</button>
+
         ),
     },
     {
