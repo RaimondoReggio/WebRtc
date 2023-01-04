@@ -4,7 +4,7 @@ import ChatInput from "./chat-input";
 import axios from "axios";
 import {v4 as uuidv4} from 'uuid';
 
-const ChatContainer = ({currentChat, currentUser, socket}) => {
+const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notifications}) => {
 
     const {getAccessTokenSilently} = useAuth0();
 
@@ -75,7 +75,17 @@ const ChatContainer = ({currentChat, currentUser, socket}) => {
             socket.current.on("msg-receive", (data) => {
                 if(data.from === currentChat.id) {
                     setArrivalMessage({fromSelf: false, message: data.message});
-                } 
+                } else {
+                    if(notifications[data.from]) {
+                        const new_notifications = [...notifications];
+                        new_notifications[data.from] = new_notifications[data.from] + 1;
+                        notifyUser(new_notifications); 
+                    } else {
+                        const new_notifications = [...notifications];
+                        new_notifications[data.from] = 1;
+                        notifyUser(new_notifications); 
+                    }
+                }
             });
         }
     },[]);
@@ -92,31 +102,55 @@ const ChatContainer = ({currentChat, currentUser, socket}) => {
 
     return(
         <>
-        <div className="user-details">
-            <div className="avatar">
-                <img src={currentChat.avatar_image} alt="avatar" />
-            </div>
-            <div className="username">
-                <h3>{currentChat.username}</h3>
-            </div>
-        </div>
-        <div className="chat-messages">
-            {messages.map((message) => {
-                return (
-                    <div ref={scrollRef} key={uuidv4()}>
-                        <div className={`message ${message.fromSelf?"sended":"recieved"}`}>
-                            <div className="content">
-                                <p>
-                                    {message.message}
-                                </p>
+        <div className="chat-component-container">
+            <div className="chat-component-content">
+                <div className="card">
+                    <div className="card-header">
+                        <div className="user-details">
+                            <div className="avatar">
+                                <img src={currentChat.avatar_image} alt="avatar" />
+                            </div>
+                            <div className="username">
+                                <h3>{currentChat.username}</h3>
                             </div>
                         </div>
                     </div>
-                )
-            })}
-        </div>
-        <div className="chat-input-container">
-            <ChatInput handleSendMsg={handleSendMsg} />
+                    <div className="card-body">
+                        <div className="chat-messages-container">
+                            <div className="chat-messages-content">
+                                {messages.map((message) => {
+                                    return (
+                                        <div className="message-scroll-div mb-4" ref={scrollRef} key={uuidv4()}>
+                                            <div className={`message-item ${message.fromSelf?"sended":"recieved"}`}>
+                                                {!message.fromSelf &&
+                                                <div className={`message-avatar ${message.fromSelf?"sended":"recieved"}`}>
+                                                    <img src={`${message.fromSelf?currentChat.avatar_image:currentUser.avatar_image}`} />
+                                                </div>
+                                                }
+                                                <div className="message-content">
+                                                    <p>
+                                                        {message.message}
+                                                    </p>
+                                                </div>
+                                                {message.fromSelf && 
+                                                <div className={`message-avatar ${message.fromSelf?"sended":"recieved"}`}>
+                                                    <img src={`${message.fromSelf?currentUser.avatar_image:currentChat.avatar_image}`} />
+                                                </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-footer">
+                        <div className="chat-input-container">
+                            <ChatInput handleSendMsg={handleSendMsg} />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         </>
     );

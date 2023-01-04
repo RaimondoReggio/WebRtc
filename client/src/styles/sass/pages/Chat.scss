@@ -1,0 +1,21 @@
+.chat-container {
+    height: 100%;
+    width: 100%;
+    .chat-content {
+        height: 100%;
+        width: 100%;
+        .contacts-column {
+            height: 100%;
+            .card {
+                height: 90%;
+                width: 90%;
+                .card-body {
+                    padding: 0;
+                }
+            }
+        }
+        .chat-column {
+            height: 100%;
+        }
+    }
+}

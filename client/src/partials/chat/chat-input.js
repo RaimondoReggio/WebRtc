@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 const ChatInput = ({handleSendMsg}) => {
 
@@ -15,8 +17,11 @@ const ChatInput = ({handleSendMsg}) => {
     return (
         <form className='input-container' onSubmit={(e)=>sendMsg(e)}>
             <input type="text" placeholder='type your message here' value={msg} onChange={(e)=>setMsg(e.target.value)} />
-            <button className='submit' type='submit' >
-                Send
+            <button className='submit btn' type='submit' >
+                <span className="d-flex align-items-center justify-content-center"> 
+                    Send
+                    <FontAwesomeIcon className="icon" icon={faPaperPlane} style={{marginLeft: '10px'}}/>
+                </span>
             </button>
         </form>        
     )

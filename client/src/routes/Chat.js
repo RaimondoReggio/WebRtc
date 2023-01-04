@@ -17,6 +17,7 @@ function Chat() {
     const [currentUser,setCurrentUser] = useState();
     const [contacts,setContacts]= useState([]);
     const [currentChat,setCurrentChat] = useState();
+    const [newMessages, setNewMessages] = useState([]);
 
     // Execute getUserData on mounting
     useEffect(() => {
@@ -80,19 +81,32 @@ function Chat() {
         setCurrentChat(chat)
     }
 
+    // Change newMessages list
+    const handleMessagesChange = (new_messages) => {
+        setNewMessages(new_messages);
+    }
+
     return (
         <>
         <Header></Header>
         <Content>
-            <div className="row">
-                <div className="col-md-4">
-                    <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} />
-                </div>
-                <div className="col-md-8">
-                    {currentChat===undefined?
-                        <h2>Welcome</h2>:
-                        <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} />
-                    }
+            <div className="chat-container">
+                <div className="chat-content">
+                    <div className="row" style={{height: '100%'}}>
+                        <div className="col-md-4 contacts-column d-flex align-items-center justify-content-center">
+                            <div className="card">
+                                <div className="card-body">
+                                    <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} notifications={newMessages}/>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-8 chat-column">
+                            {currentChat===undefined?
+                                <h2>Welcome</h2>:
+                                <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} notifyUser={handleMessagesChange} notifications={newMessages}/>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </Content>
