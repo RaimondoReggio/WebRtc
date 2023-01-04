@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Contacts = ({contacts, currentUser, changeChat, notifications}) => {
+const Contacts = ({contacts, currentUser, changeChat, notifications, notifyUser}) => {
 
     // State variables
     const[currentUserName,setCurrentUserName] = useState(undefined);
@@ -18,6 +18,12 @@ const Contacts = ({contacts, currentUser, changeChat, notifications}) => {
     const changeCurrentChat = (index, contact) => {
         setCurrentSelected(index);
         changeChat(contact);
+
+        if(notifications[contact.id]) {
+            var new_notifications = {...notifications};
+            delete new_notifications[contact.id];
+            notifyUser(new_notifications); 
+        }
     }
 
     return (

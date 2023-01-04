@@ -64,7 +64,6 @@ function Chat() {
                 },
             }).then((response) => {
                 if(response.data) {
-                    console.log(response.data);
                     setContacts(response.data);
                 }
             });
@@ -97,7 +96,7 @@ function Chat() {
                         <div className="col-md-4 contacts-column d-flex align-items-center justify-content-center">
                             <div className="card">
                                 <div className="card-body">
-                                    <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} notifications={newMessages}/>
+                                    <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} notifications={newMessages} notifyUser={handleMessagesChange}/>
                                 </div>
                             </div>
                         </div>

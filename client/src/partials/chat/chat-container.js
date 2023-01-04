@@ -63,6 +63,7 @@ const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notificati
             message: msg,
         });
 
+
         // Update user view
         const msgs = [...messages];
         msgs.push({fromSelf:true, message:msg});
@@ -73,24 +74,25 @@ const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notificati
     useEffect(() => {
         if(socket.current) {
             socket.current.on("msg-receive", (data) => {
-                console.log(data.from);
-                console.log(currentChat.id);
                 if(data.from === currentChat.id) {
                     setArrivalMessage({fromSelf: false, message: data.message});
                 } else {
+                    var new_notifications = {...notifications};
                     if(notifications[data.from]) {
-                        const new_notifications = [...notifications];
                         new_notifications[data.from] = new_notifications[data.from] + 1;
                         notifyUser(new_notifications); 
                     } else {
-                        const new_notifications = [...notifications];
                         new_notifications[data.from] = 1;
                         notifyUser(new_notifications); 
                     }
                 }
             });
+
+            return () => {
+                socket.current.off('msg-receive');
+            }
         }
-    },[]);
+    },[currentChat, notifications]);
 
     // Update new message
     useEffect(() => {

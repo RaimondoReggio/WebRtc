@@ -115,7 +115,8 @@ nav.nav-header {
         left: 95%;
         top: 0.5rem;
         border-radius: 100%;
-        background-color: #03CBB6; }
+        background-color: #03CBB6;
+        color: #fff; }
     .contacts-container .contacts-content .contact-item .username h3 {
       margin-bottom: 0;
       text-transform: capitalize; }
