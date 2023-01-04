@@ -24,7 +24,7 @@ function App() {
         <Route path="/" element={<Home />}/>
         <Route path="/waiting" element={<ProtectedRoutes><WaitingRoom /></ProtectedRoutes>} />
         <Route path="/register" element={<ProtectedRoutes><Register /></ProtectedRoutes>} />
-        <Route path="/userpage" element={<ProtectedRoutesUser><Chat/></ProtectedRoutesUser>} />
+        <Route path="/userpage" element={<ProtectedRoutesUser><Profile/></ProtectedRoutesUser>} />
         <Route path="/chat" element={<ProtectedRoutesUser><Chat/></ProtectedRoutesUser>} />
       </Routes>
     </div>

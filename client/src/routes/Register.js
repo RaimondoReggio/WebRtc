@@ -81,7 +81,7 @@ function Register() {
         
         const token = await getAccessTokenSilently();
 
-        await axios({method: 'post', url: 'http://localhost:4000/registerUser', 
+        await axios({method: 'post', url: BASE_URL + '/registerUser', 
             headers: {'Authorization': `Bearer ${token}`}, 
             params : {
                 first_name: first_name,

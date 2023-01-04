@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from '../assets/logo/logo_nero.svg';
 import { Dropdown, Avatar } from "antd";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTv, faComment, faLink } from '@fortawesome/free-solid-svg-icons';
 import LogoutButton from "../partials/auth/logout-button";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+
+    const navigate = useNavigate();
+
+    const [current_section, setCurrentSection] = useState(undefined);
 
     const items = [
     {
@@ -24,6 +29,11 @@ const Header = () => {
     },
     ];
 
+    const handleChangeSection = async(index, path) => {
+        setCurrentSection(index);
+
+        navigate(path);
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light nav-header">
@@ -51,17 +61,23 @@ const Header = () => {
                 </a>
 
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
+                    <li className={`nav-item ${current_section === 0 ? "active" : ""}`}>
                         <FontAwesomeIcon icon={faTv} />
-                        <a className="nav-link">Live</a>
+                        <a className="nav-link">
+                            <button className="btn" onClick={() => handleChangeSection(0, '/live')}>Live</button>
+                        </a>
                     </li>
-                    <li className="nav-item">
+                    <li className={`nav-item ${current_section == 1 ? "active" : ""}`}>
                         <FontAwesomeIcon icon={faLink} />
-                        <a className="nav-link">Connect</a>
+                        <a className="nav-link">
+                            <button className="btn" onClick={() => handleChangeSection(1, '/live')}>Connect</button>
+                        </a>
                     </li>
-                    <li className="nav-item active">
+                    <li className={`nav-item ${current_section === 2 ? "active" : ""}`}>
                         <FontAwesomeIcon icon={faComment} />
-                        <a className="nav-link">Chat</a>
+                        <a className="nav-link">
+                            <button className="btn" onClick={() => handleChangeSection(2, '/chat')}>Chat</button>
+                        </a>
                     </li>
                 </ul>
 

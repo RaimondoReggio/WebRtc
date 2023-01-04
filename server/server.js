@@ -5,8 +5,8 @@ var fs = require('fs');
 const port = 4000;
 const socket = require("socket.io");
 
-var privateKey  = fs.readFileSync('C:/Windows/System32/cert.key', 'utf8');
-var certificate = fs.readFileSync('C:/Windows/System32/cert.crt', 'utf8');
+var privateKey  = fs.readFileSync('./certificate/key.pem');
+var certificate = fs.readFileSync('./certificate/certificate.pem');
 
 var credentials = {key: privateKey, cert: certificate};
 

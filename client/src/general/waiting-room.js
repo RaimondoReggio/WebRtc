@@ -7,6 +7,9 @@ const WaitingRoom = () => {
     const { getAccessTokenSilently } = useAuth0();
     const navigate = useNavigate();
 
+    // API Base Url
+    const BASE_URL = process.env.REACT_APP_SERVER_URL;
+
     useEffect(() => {
         alreadyReagister();
     }, []);
@@ -15,7 +18,7 @@ const WaitingRoom = () => {
     const alreadyReagister = async() => {
         const token = await getAccessTokenSilently();
 
-        await Axios.get("http://localhost:4000/checkIfUserExist", {
+        await Axios.get(BASE_URL + "/checkIfUserExist", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
