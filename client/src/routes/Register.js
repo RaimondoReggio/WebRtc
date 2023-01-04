@@ -52,7 +52,7 @@ function Register() {
     };
 
     // Takes token function
-    const { getAccessTokenSilently } = useAuth0();
+    const { getAccessTokenSilently, user} = useAuth0();
 
     // Takes navigate function
     const navigate = useNavigate();
@@ -60,7 +60,7 @@ function Register() {
     // Check if user is already registered
     const checkIfUserExist = async() => {
         const token = await getAccessTokenSilently();
-
+        
         await Axios.get(BASE_URL + "/checkIfUserExist", {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -94,7 +94,8 @@ function Register() {
                 birth_country: birth_country,
                 job: job,
                 biography: biography,
-                avatar_image: avatar_image, 
+                avatar_image: avatar_image,
+                email: user.email
             } 
         }).then((response) => {
             if(response.data.registered) {

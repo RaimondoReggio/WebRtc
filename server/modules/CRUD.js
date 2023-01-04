@@ -75,7 +75,7 @@ const updateOneDocument = async (coll, filter, updates, options) => {
 
 }
 
-const updateDocuments = async (coll, filter, options) => {
+const updateDocuments = async (coll, filter, updates, options) => {
 
     try {
         const collection = database.collection(coll);

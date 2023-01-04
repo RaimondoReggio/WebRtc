@@ -5,8 +5,12 @@ import Content from "../general/content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faVenusMars, faCakeCandles, faEarthAmerica, faHouseUser, faBriefcase} from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
+import axios from 'axios';
+import { useLocation } from "react-router-dom";
 
-const Profile = () => {
+import { useNavigate } from 'react-router-dom';
+
+const StrangerPage = () => {
 
     // User data Auth0
     const { user } = useAuth0();
@@ -29,16 +33,25 @@ const Profile = () => {
     const [last_name, setLasttName] = useState();
     const [native_l, setNative_l] = useState();
     const [new_l, setNew_l] = useState();
-    const { email } = user;
+    const [email, setEmail] = useState();
+    const navigate = useNavigate();
 
+    const location = useLocation();
+
+    // get userId
+    let userId = location.state.userId;
 
     // Retrives all user data
-    const getUserData = async() => {
+    const getStrangerData = async() => {
         const token = await getAccessTokenSilently();
-        await Axios.get(BASE_URL+'/getUserData', {
+
+        await Axios.get(BASE_URL+'/getStrangerData', {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            params: {
+                user_id: userId
+            }
         }).then((response) => {
             if(response.data) {
                 setAvatarImage(response.data.avatar_image);
@@ -52,13 +65,30 @@ const Profile = () => {
                 setLasttName(response.data.last_name);
                 setNative_l(response.data.native_l);
                 setNew_l(response.data.new_l);
+                setEmail(response.data.email);
             }
         });
     };
 
     useEffect(() => {
-        getUserData();
+        getStrangerData();
     });
+
+    const handleClick = async() => {
+        
+        const token = await getAccessTokenSilently();
+
+        await axios({method: 'post', url: BASE_URL + '/addContact', 
+            headers: {'Authorization': `Bearer ${token}`}, 
+            params : {
+                contact_id: userId,
+            } 
+        }).then((response) => {
+            navigate('/chat');
+        });
+
+        
+    }
 
     return (
         <>
@@ -74,7 +104,7 @@ const Profile = () => {
                             <h5 className="my-3">{username}</h5>
                             <p className="text-muted mb-4">{biography}</p>
                             <div className="d-flex justify-content-center mb-2">
-                                <button type="button" className="btn btn-primary btn-msg">Message</button>
+                                <button type="button" className="btn btn-primary btn-msg" onClick={() => handleClick()}>Message</button>
                                 <button type="button" className="btn btn-outline-primary btn-like ms-1">Like</button>
                             </div>
                             </div>
@@ -208,4 +238,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default StrangerPage;

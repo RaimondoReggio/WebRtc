@@ -36,7 +36,7 @@ const io = socket(server,{
     }}
 );
 
-const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages} = require('./modules/dbinterface');
+const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages, getPossibleUsers, addContact} = require('./modules/dbinterface');
 const {jwtCheck} = require('./modules/jwt');
 
 // Return an error message if the jwt isn
@@ -73,11 +73,12 @@ app.post('/registerUser', async(req, res) => {
         job,
         biography,
         avatar_image, 
+        email,
     } = req.query;
 
     var message = "Unsuccessfull registration";
 
-    const result = await createUser(user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image);
+    const result = await createUser(user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email);
 
     if(result) {
         message = "Successfull registration"
@@ -100,6 +101,19 @@ app.get('/getUserData', async(req, res) => {
     }
 });
 
+app.get('/getStrangerData', async(req, res) => {
+
+    const stranger_id = req.query.user_id;
+
+    const result = await getUserData(stranger_id);
+
+    if(result) {
+        res.json(result);
+    } else {
+        res.send("Unable to get user data");
+    }
+});
+
 app.get('/getContacts', async(req, res) => {
 
     const user_id = req.auth.sub; 
@@ -110,6 +124,19 @@ app.get('/getContacts', async(req, res) => {
         res.json(result);
     } else {
         res.send("Unable to get contacts");
+    }
+});
+
+app.get('/getPossibleUsers', async(req, res) => {
+
+    const user_id = req.auth.sub; 
+
+    const result = await getPossibleUsers(user_id);
+
+    if(result) {
+        res.json(result);
+    } else {
+        res.send("Unable to get possible users");
     }
 });
 
@@ -142,17 +169,33 @@ app.post('/addMsg', async(req, res) => {
     }
 });
 
+app.post('/addContact', async(req, res) => {
+
+    const user_id = req.auth.sub; 
+    const {contact_id} = req.query;
+
+    const result1 = addContact(user_id, contact_id);
+    const result2 = addContact(contact_id, user_id);
+
+    if(result1 && result2) {
+        res.send("Contact added");
+    } else {
+        res.send("Unable to add contact");
+    }
+});
+
 global.onlineUsers = new Map();
 
 io.on("connection",(socket)=>{
 
-    global.chatSocket = socket;
+    //global.chatSocket = socket;
 
     socket.on("add-user",(userId)=>{
         onlineUsers.set(userId,socket.id);
     });
 
     socket.on("send-msg",(data)=>{
+        console.log(data);
         const sendUserSocket = onlineUsers.get(data.to);
         if(sendUserSocket){
             socket.to(sendUserSocket).emit("msg-receive",data);

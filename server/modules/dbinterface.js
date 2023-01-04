@@ -30,7 +30,7 @@ const checkIfUserExist = async (user_id) => {
     }
 }
 
-const createUser = async (user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image) => {
+const createUser = async (user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email) => {
     const coll = "users";
 
     const document = {
@@ -46,6 +46,7 @@ const createUser = async (user_id, first_name, last_name, username, native_l, ne
         job: job,
         biography: biography,
         avatar_image: avatar_image, 
+        email: email,
     }
 
     try {
@@ -85,15 +86,101 @@ const getUserData = async (user_id) => {
 
 const getContacts = async (user_id) => {
     const coll = "users";
+
+
+    try {
+
+        const query_ = {
+            user_id:  user_id,
+        }
+        const options = {
+            projection: { user_id: 1, contacts: 1 }
+        }
+
+        //Forse inserire email
+        const result_ = await findOneDocument(coll, query_, options);
+        console.log(result_);
+        if(result_.contacts){
+
+            const contact_id = result_.contacts;
+            
+            console.log("contatti:" + contact_id);
+            const users = [];
+            const query = {
+                user_id: { $in: contact_id } ,
+            }
+            
+            const result = await findDocuments(coll, query);
+
+            if(result) {
+                result.forEach(item => {
+                    const struct = {
+                        username: item.username,
+                        avatar_image: item.avatar_image,
+                        id: item.user_id,
+                    }
+                    users.push(struct)
+                });
+                return users;
+            } else {
+                return false;
+            }
+        }else{
+            return false;
+        }
+        
+    } catch(e) {
+        console.error(e);
+    }
+
+}
+
+const addContact = async (user_id, contact_id) => {
+
+    const coll = "users";
+    
+    const filter = {
+        user_id: user_id,
+    };
+
+    const updates = { 
+        $addToSet: {
+        "contacts":contact_id} 
+    };
+
+    try {
+        const result = await updateOneDocument (coll, filter, updates);
+
+        if(result) {
+            return result;
+        } else {
+            return false;
+        }
+        
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+const getPossibleUsers = async (user_id) => {
+    user_info = await getUserData(user_id);
+
+
+    const coll = "users";
     const users = [];
     const query = {
-        user_id: {
-            $ne: user_id,
-        },
+        $and: [
+                {
+                    native_l: user_info.new_l
+                },
+                {
+                new_l: user_info.native_l
+                }
+            ]
     }
 
     try {
-        //Forse inserire email
+        //Forse inseire email
         const result = await findDocuments(coll, query);
 
         if(result) {
@@ -102,6 +189,9 @@ const getContacts = async (user_id) => {
                     username: item.username,
                     avatar_image: item.avatar_image,
                     id: item.user_id,
+                    new_l: item.new_l,
+                    native_l: item.native_l,
+                    biography: item.biography,
                 }
                 users.push(struct)
             });
@@ -182,4 +272,6 @@ module.exports = {
     getAllMessages,
     getContacts,
     createMessage,
+    getPossibleUsers,
+    addContact,
 }

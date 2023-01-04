@@ -64,6 +64,7 @@ function Chat() {
                 },
             }).then((response) => {
                 if(response.data) {
+                    console.log(response.data);
                     setContacts(response.data);
                 }
             });

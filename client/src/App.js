@@ -9,7 +9,8 @@ import WaitingRoom from './general/waiting-room';
 import './styles/main/css/style.css';
 import ProtectedRoutesUser from './general/auth/protected-route-user';
 import Chat from './routes/Chat';
-
+import Connect from './routes/Connect';
+import StrangerPage from './routes/StrangerPage';
 function App() {
 
   const { isLoading } = useAuth0();
@@ -26,6 +27,8 @@ function App() {
         <Route path="/register" element={<ProtectedRoutes><Register /></ProtectedRoutes>} />
         <Route path="/userpage" element={<ProtectedRoutesUser><Profile/></ProtectedRoutesUser>} />
         <Route path="/chat" element={<ProtectedRoutesUser><Chat/></ProtectedRoutesUser>} />
+        <Route path="/connect" element={<ProtectedRoutesUser><Connect /></ProtectedRoutesUser>} />
+        <Route path="/strangerpage" element={<ProtectedRoutesUser><StrangerPage /></ProtectedRoutesUser>} />
       </Routes>
     </div>
   );
