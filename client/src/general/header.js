@@ -70,7 +70,7 @@ const Header = () => {
                     <li className={`nav-item ${current_section == 1 ? "active" : ""}`}>
                         <FontAwesomeIcon icon={faLink} />
                         <a className="nav-link">
-                            <button className="btn" onClick={() => handleChangeSection(1, '/live')}>Connect</button>
+                            <button className="btn" onClick={() => handleChangeSection(1, '/connect')}>Connect</button>
                         </a>
                     </li>
                     <li className={`nav-item ${current_section === 2 ? "active" : ""}`}>
