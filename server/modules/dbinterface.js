@@ -30,7 +30,7 @@ const checkIfUserExist = async (user_id) => {
     }
 }
 
-const createUser = async (user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email) => {
+const createUser = async (user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email, goals, hobbies) => {
     const coll = "users";
 
     const document = {
@@ -47,10 +47,53 @@ const createUser = async (user_id, first_name, last_name, username, native_l, ne
         biography: biography,
         avatar_image: avatar_image, 
         email: email,
+        goals: goals,
+        hobbies: hobbies,
+        points: 0,
     }
 
     try {
         const result = insertOneDocument(coll, document);
+
+        if(result) {
+            return true;
+        } else {
+            return false;
+        }
+
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+const updateUserProfile = async (user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email, goals, hobbies) => {
+    const coll = "users";
+
+    const document = {
+        $set: {
+            first_name: first_name,
+            last_name: last_name,
+            username: username, 
+            native_l: native_l, 
+            new_l: new_l,
+            gender: gender,
+            birth_date: birth_date,
+            birth_country: birth_country,
+            job: job,
+            biography: biography,
+            avatar_image: avatar_image, 
+            email: email,
+            goals: goals,
+            hobbies: hobbies,
+        },
+    }
+
+    const filter =  {
+        user_id: user_id,
+    };
+
+    try {
+        const result = updateOneDocument(coll, filter, document);
 
         if(result) {
             return true;
@@ -274,4 +317,5 @@ module.exports = {
     createMessage,
     getPossibleUsers,
     addContact,
+    updateUserProfile,
 }

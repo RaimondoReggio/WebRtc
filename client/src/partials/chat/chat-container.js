@@ -128,7 +128,7 @@ const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notificati
                                             <div className={`message-item ${message.fromSelf?"sended":"recieved"}`}>
                                                 {!message.fromSelf &&
                                                 <div className={`message-avatar ${message.fromSelf?"sended":"recieved"}`}>
-                                                    <img src={`${message.fromSelf?currentChat.avatar_image:currentUser.avatar_image}`} />
+                                                    <img src={`${message.fromSelf?currentUser.avatar_image:currentChat.avatar_image}`} />
                                                 </div>
                                                 }
                                                 <div className="message-content">

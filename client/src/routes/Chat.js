@@ -63,9 +63,9 @@ function Chat() {
                     Authorization: `Bearer ${token}`,
                 },
             }).then((response) => {
-                if(response.data) {
+                if(response.data != 'Unable to get contacts') {
                     setContacts(response.data);
-                }
+                } 
             });
         };
 

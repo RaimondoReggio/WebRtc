@@ -10,7 +10,8 @@ import avatar1 from '../assets/avatar/avatar1.png';
 import avatar2 from '../assets/avatar/avatar2.png';
 import avatar3 from '../assets/avatar/avatar3.png';
 
-let index = 0;
+let goal_index = 0;
+let hobbie_index = 0;
 
 function Register() {
 
@@ -36,10 +37,23 @@ function Register() {
     const [biography, setBiography] = useState(''); 
     const [avatar_image, setAvatarImage] = useState('https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp');
 
-    // Hobbies variables
-    const [items, setItems] = useState(['jack', 'lucy']);
-    const [name, setName] = useState('');
-    const inputRef = useRef(null);
+    // Goals variables
+    const [goal_items, setGoalItems] = useState(['travel', 'study']);
+    const [goal1, setGoal1] = useState('');
+    const [goal2, setGoal2] = useState('');
+    const [goal3, setGoal3] = useState('');
+    const [goal4, setGoal4] = useState('');
+    const [new_goal, setNewGoal] = useState('');
+    const inputRefGoals = useRef(null);
+
+    // Hobbies variables 
+    const [hobbie_items, setHobbieItems] = useState(['play', 'party']);
+    const [hobbie1, setHobbie1] = useState('');
+    const [hobbie2, setHobbie2] = useState('');
+    const [hobbie3, setHobbie3] = useState('');
+    const [hobbie4, setHobbie4] = useState('');
+    const [new_hobbie, setNewHobbie] = useState('');
+    const inputRefHobbies = useRef(null);
 
     // Alert function
     const [messageApi, contextHolder] = message.useMessage();
@@ -95,7 +109,9 @@ function Register() {
                 job: job,
                 biography: biography,
                 avatar_image: avatar_image,
-                email: user.email
+                email: user.email,
+                goals: [goal1, goal2, goal3, goal4],
+                hobbies: [hobbie1, hobbie2, hobbie3, hobbie4],
             } 
         }).then((response) => {
             if(response.data.registered) {
@@ -134,18 +150,22 @@ function Register() {
         setAvatarImage(imageUrl);
     }
 
-    // Hobbies select changed
-    const onNameChange = (event) => {
-      setName(event.target.value);
+    const addItemGoal = (e) => {
+        e.preventDefault();
+        setGoalItems([...goal_items, new_goal || `New item ${goal_index++}`]);
+        setNewGoal('');
+        setTimeout(() => {
+          inputRefGoals.current?.focus();
+        }, 0);
     };
 
-    const addItem = (e) => {
-      e.preventDefault();
-      setItems([...items, name || `New item ${index++}`]);
-      setName('');
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
+    const addItemHobbie = (e) => {
+        e.preventDefault();
+        setHobbieItems([...hobbie_items, new_hobbie || `New item ${hobbie_index++}`]);
+        setNewHobbie('');
+        setTimeout(() => {
+        inputRefHobbies.current?.focus();
+        }, 0);
     };
 
     return (
@@ -364,6 +384,7 @@ function Register() {
                                     <>
                                     <div className='hobbies-goals-container mt-5'>
                                         <div className='row'>
+                                            <p>Tell us more about yourself (optional fields)</p>
                                             <div className='col'>
                                                 <div className='text'>
                                                     <p>Choiche your hobbies</p>
@@ -372,6 +393,7 @@ function Register() {
                                                     <Select
                                                     style={{width: '100%'}}
                                                     placeholder="Your hobby"
+                                                    onChange={(value) => {setHobbie1(value)}}
                                                     dropdownRender={(menu) => (
                                                         <>
                                                         {menu}
@@ -387,17 +409,17 @@ function Register() {
                                                         >
                                                             <Input
                                                             placeholder="Please enter item"
-                                                            ref={inputRef}
-                                                            value={name}
-                                                            onChange={onNameChange}
+                                                            ref={inputRefHobbies}
+                                                            value={new_hobbie}
+                                                            onChange={(e) => {setNewHobbie(e.target.value)}}
                                                             />
-                                                            <Button type="text" onClick={addItem}>
+                                                            <Button type="text" onClick={addItemHobbie}>
                                                             Add item
                                                             </Button>
                                                         </Space>
                                                         </>
                                                     )}
-                                                    options={items.map((item) => ({
+                                                    options={hobbie_items.map((item) => ({
                                                         label: item,
                                                         value: item,
                                                     }))}
@@ -407,6 +429,7 @@ function Register() {
                                                     <Select
                                                     style={{width: '100%'}}
                                                     placeholder="Your hobby"
+                                                    onChange={(value) => {setHobbie2(value)}}
                                                     dropdownRender={(menu) => (
                                                         <>
                                                         {menu}
@@ -422,17 +445,17 @@ function Register() {
                                                         >
                                                             <Input
                                                             placeholder="Please enter item"
-                                                            ref={inputRef}
-                                                            value={name}
-                                                            onChange={onNameChange}
+                                                            ref={inputRefHobbies}
+                                                            value={new_hobbie}
+                                                            onChange={(e) => {setNewHobbie(e.target.value)}}
                                                             />
-                                                            <Button type="text" onClick={addItem}>
+                                                            <Button type="text" onClick={addItemHobbie}>
                                                             Add item
                                                             </Button>
                                                         </Space>
                                                         </>
                                                     )}
-                                                    options={items.map((item) => ({
+                                                    options={hobbie_items.map((item) => ({
                                                         label: item,
                                                         value: item,
                                                     }))}
@@ -442,6 +465,7 @@ function Register() {
                                                     <Select
                                                     style={{width: '100%'}}
                                                     placeholder="Your hobby"
+                                                    onChange={(value) => {setHobbie3(value)}}
                                                     dropdownRender={(menu) => (
                                                         <>
                                                         {menu}
@@ -457,17 +481,17 @@ function Register() {
                                                         >
                                                             <Input
                                                             placeholder="Please enter item"
-                                                            ref={inputRef}
-                                                            value={name}
-                                                            onChange={onNameChange}
+                                                            ref={inputRefHobbies}
+                                                            value={new_hobbie}
+                                                            onChange={(e) => {setNewHobbie(e.target.value)}}
                                                             />
-                                                            <Button type="text" onClick={addItem}>
+                                                            <Button type="text" onClick={addItemHobbie}>
                                                             Add item
                                                             </Button>
                                                         </Space>
                                                         </>
                                                     )}
-                                                    options={items.map((item) => ({
+                                                    options={hobbie_items.map((item) => ({
                                                         label: item,
                                                         value: item,
                                                     }))}
@@ -477,6 +501,7 @@ function Register() {
                                                     <Select
                                                     style={{width: '100%'}}
                                                     placeholder="Your hobby"
+                                                    onChange={(value) => {setHobbie4(value)}}
                                                     dropdownRender={(menu) => (
                                                         <>
                                                         {menu}
@@ -492,17 +517,17 @@ function Register() {
                                                         >
                                                             <Input
                                                             placeholder="Please enter item"
-                                                            ref={inputRef}
-                                                            value={name}
-                                                            onChange={onNameChange}
+                                                            ref={inputRefHobbies}
+                                                            value={new_hobbie}
+                                                            onChange={(e) => {setNewHobbie(e.target.value)}}
                                                             />
-                                                            <Button type="text" onClick={addItem}>
+                                                            <Button type="text" onClick={addItemHobbie}>
                                                             Add item
                                                             </Button>
                                                         </Space>
                                                         </>
                                                     )}
-                                                    options={items.map((item) => ({
+                                                    options={hobbie_items.map((item) => ({
                                                         label: item,
                                                         value: item,
                                                     }))}
@@ -517,6 +542,7 @@ function Register() {
                                                     <Select
                                                     style={{width: '100%'}}
                                                     placeholder="Your goal"
+                                                    onChange={(value) => {setGoal1(value)}}
                                                     dropdownRender={(menu) => (
                                                         <>
                                                         {menu}
@@ -532,17 +558,17 @@ function Register() {
                                                         >
                                                             <Input
                                                             placeholder="Please enter item"
-                                                            ref={inputRef}
-                                                            value={name}
-                                                            onChange={onNameChange}
+                                                            ref={inputRefGoals}
+                                                            value={new_goal}
+                                                            onChange={(e) => {setNewGoal(e.target.value)}}
                                                             />
-                                                            <Button type="text" onClick={addItem}>
+                                                            <Button type="text" onClick={addItemGoal}>
                                                             Add item
                                                             </Button>
                                                         </Space>
                                                         </>
                                                     )}
-                                                    options={items.map((item) => ({
+                                                    options={goal_items.map((item) => ({
                                                         label: item,
                                                         value: item,
                                                     }))}
@@ -552,6 +578,7 @@ function Register() {
                                                     <Select
                                                     style={{width: '100%'}}
                                                     placeholder="Your goal"
+                                                    onChange={(value) => {setGoal2(value)}}
                                                     dropdownRender={(menu) => (
                                                         <>
                                                         {menu}
@@ -567,17 +594,17 @@ function Register() {
                                                         >
                                                             <Input
                                                             placeholder="Please enter item"
-                                                            ref={inputRef}
-                                                            value={name}
-                                                            onChange={onNameChange}
+                                                            ref={inputRefGoals}
+                                                            value={new_goal}
+                                                            onChange={(e) => {setNewGoal(e.target.value)}}
                                                             />
-                                                            <Button type="text" onClick={addItem}>
+                                                            <Button type="text" onClick={addItemGoal}>
                                                             Add item
                                                             </Button>
                                                         </Space>
                                                         </>
                                                     )}
-                                                    options={items.map((item) => ({
+                                                    options={goal_items.map((item) => ({
                                                         label: item,
                                                         value: item,
                                                     }))}
@@ -587,6 +614,7 @@ function Register() {
                                                     <Select
                                                     style={{width: '100%'}}
                                                     placeholder="Your goal"
+                                                    onChange={(value) => {setGoal3(value)}}
                                                     dropdownRender={(menu) => (
                                                         <>
                                                         {menu}
@@ -602,17 +630,17 @@ function Register() {
                                                         >
                                                             <Input
                                                             placeholder="Please enter item"
-                                                            ref={inputRef}
-                                                            value={name}
-                                                            onChange={onNameChange}
+                                                            ref={inputRefGoals}
+                                                            value={new_goal}
+                                                            onChange={(e) => {setNewGoal(e.target.value)}}
                                                             />
-                                                            <Button type="text" onClick={addItem}>
+                                                            <Button type="text" onClick={addItemGoal}>
                                                             Add item
                                                             </Button>
                                                         </Space>
                                                         </>
                                                     )}
-                                                    options={items.map((item) => ({
+                                                    options={goal_items.map((item) => ({
                                                         label: item,
                                                         value: item,
                                                     }))}
@@ -622,6 +650,7 @@ function Register() {
                                                     <Select
                                                     style={{width: '100%'}}
                                                     placeholder="Your goal"
+                                                    onChange={(value) => {setGoal4(value)}}
                                                     dropdownRender={(menu) => (
                                                         <>
                                                         {menu}
@@ -637,17 +666,17 @@ function Register() {
                                                         >
                                                             <Input
                                                             placeholder="Please enter item"
-                                                            ref={inputRef}
-                                                            value={name}
-                                                            onChange={onNameChange}
+                                                            ref={inputRefGoals}
+                                                            value={new_goal}
+                                                            onChange={(e) => {setNewGoal(e.target.value)}}
                                                             />
-                                                            <Button type="text" onClick={addItem}>
+                                                            <Button type="text" onClick={addItemGoal}>
                                                             Add item
                                                             </Button>
                                                         </Space>
                                                         </>
                                                     )}
-                                                    options={items.map((item) => ({
+                                                    options={goal_items.map((item) => ({
                                                         label: item,
                                                         value: item,
                                                     }))}

@@ -19,7 +19,6 @@ function Connect(){
 
         const getPossibleUsers = async() => {
             const token = await getAccessTokenSilently();
-            console.log(token);
             await Axios.get(BASE_URL+'/getPossibleUsers', {
                 headers: {
                     Authorization: `Bearer ${token}`,

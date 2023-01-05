@@ -32,6 +32,8 @@ const Contacts = ({contacts, currentUser, changeChat, notifications, notifyUser}
             <>
                 <div className="contacts-container">
                     <div className="contacts-content">
+                        { contacts.length > 0 && 
+                        <>
                         {contacts.map((contact, index) => {
                             return (
                                 <div
@@ -59,6 +61,8 @@ const Contacts = ({contacts, currentUser, changeChat, notifications, notifyUser}
                                 </div>
                             );
                         })}
+                        </>
+                        }
                     </div>
                 </div>
             </>

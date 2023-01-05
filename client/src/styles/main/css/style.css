@@ -78,6 +78,8 @@ nav.nav-header {
       color: #03CBB6; }
     nav.nav-header .navbar-nav .nav-item svg {
       margin-right: 0.5rem; }
+  nav.nav-header .user-drop-down {
+    font-size: 25px; }
 
 .ant-dropdown-menu .ant-dropdown-menu-item .ant-dropdown-menu-title-content button {
   border: 0;
@@ -150,18 +152,19 @@ nav.nav-header {
             justify-content: flex-end; }
             .chat-component-container .chat-component-content .card .card-body .chat-messages-container .chat-messages-content .message-item.sended .message-content {
               background-color: #01887a;
-              border-bottom-left-radius: 10px;
-              border-bottom-right-radius: 0; }
-          .chat-component-container .chat-component-content .card .card-body .chat-messages-container .chat-messages-content .message-item .message-content {
+              border-bottom-right-radius: 0;
+              margin-right: 1rem; }
+          .chat-component-container .chat-component-content .card .card-body .chat-messages-container .chat-messages-content .message-item.recieved .message-content {
+            margin-left: 1rem;
             background-color: #03CBB6;
+            border-bottom-left-radius: 0; }
+          .chat-component-container .chat-component-content .card .card-body .chat-messages-container .chat-messages-content .message-item .message-content {
             padding: 0.5rem;
             padding-left: 2rem;
             padding-right: 5rem;
             border-radius: 10px;
-            border-bottom-left-radius: 0;
             display: flex;
-            align-items: center;
-            margin-right: 1rem; }
+            align-items: center; }
             .chat-component-container .chat-component-content .card .card-body .chat-messages-container .chat-messages-content .message-item .message-content p {
               margin-bottom: 0;
               color: #fff; }
@@ -337,6 +340,19 @@ nav.nav-header {
 
 .user-page-container .progress-bar {
   background-color: #03CBB6; }
+
+.user-page-container .job-field {
+  width: 140px; }
+
+.user-page-container .card-goals, .user-page-container .card-hobbies {
+  height: 17.5rem; }
+
+.user-page-container .no-item-message {
+  height: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #03CBB6; }
 
 .chat-container {
   height: 100%;

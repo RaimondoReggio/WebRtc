@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo from '../assets/logo/logo_nero.svg';
 import { Dropdown, Avatar } from "antd";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTv, faComment, faLink } from '@fortawesome/free-solid-svg-icons';
+import { faTv, faComment, faLink, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import LogoutButton from "../partials/auth/logout-button";
 import { useNavigate } from "react-router-dom";
 
@@ -85,7 +85,7 @@ const Header = () => {
 
                 <div className="user-drop-down d-flex align-items-center">
                     <Dropdown className="user-dropdown" menu={{ items }} placement="bottomLeft">
-                        <Avatar src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"></Avatar>
+                        <FontAwesomeIcon icon={faCaretDown} />
                     </Dropdown>
                 </div>
             </div>

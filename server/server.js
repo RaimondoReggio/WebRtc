@@ -36,7 +36,7 @@ const io = socket(server,{
     }}
 );
 
-const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages, getPossibleUsers, addContact} = require('./modules/dbinterface');
+const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages, getPossibleUsers, addContact, updateUserProfile} = require('./modules/dbinterface');
 const {jwtCheck} = require('./modules/jwt');
 
 // Return an error message if the jwt isn
@@ -74,11 +74,13 @@ app.post('/registerUser', async(req, res) => {
         biography,
         avatar_image, 
         email,
+        goals,
+        hobbies,
     } = req.query;
 
     var message = "Unsuccessfull registration";
 
-    const result = await createUser(user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email);
+    const result = await createUser(user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email, goals, hobbies);
 
     if(result) {
         message = "Successfull registration"
@@ -100,6 +102,38 @@ app.get('/getUserData', async(req, res) => {
         res.send("Unable to get user data");
     }
 });
+
+app.post('/updateUserProfile', async(req, res) => {
+
+    const user_id = req.auth.sub; 
+
+    const {
+        first_name,
+        last_name,
+        username, 
+        native_l, 
+        new_l,
+        gender,
+        birth_date,
+        birth_country,
+        job,
+        biography,
+        avatar_image, 
+        email,
+        goals,
+        hobbies,
+    } = req.query;
+
+    var message = "Unsuccessfull registration";
+
+    const result = await updateUserProfile(user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email, goals, hobbies);
+
+    if(result) {
+        message = "Successfull registration"
+    }
+
+    res.json({registered: result, message: message});
+})
 
 app.get('/getStrangerData', async(req, res) => {
 

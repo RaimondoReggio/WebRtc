@@ -11,6 +11,7 @@ import ProtectedRoutesUser from './general/auth/protected-route-user';
 import Chat from './routes/Chat';
 import Connect from './routes/Connect';
 import StrangerPage from './routes/StrangerPage';
+
 function App() {
 
   const { isLoading } = useAuth0();
