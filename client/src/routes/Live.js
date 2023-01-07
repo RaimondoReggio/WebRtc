@@ -104,9 +104,15 @@ function Live(){
             });
         };
 
-        if(currentUser) {
-            //getPossibleLives();
-            socket.current = io(BASE_URL, { query: { type: 'live' } });
+        const openSocket = async()=>{
+            const token = await getAccessTokenSilently();
+            socket.current = io(BASE_URL, 
+                { 
+                    query: { type: 'live' },
+                    extraHeaders: { Authorization: `Bearer ${token}`}
+                }
+                );
+            console.log(currentUser);
 
             socket.current.on("liveMsg", function (msg, user) {
                 let li = document.createElement("li");
@@ -222,6 +228,12 @@ function Live(){
                 );
                 
               });
+        };
+
+        if(currentUser) {
+            //getPossibleLives();
+
+            openSocket();
 
         }
     }, [currentUser]);

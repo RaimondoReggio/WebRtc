@@ -242,13 +242,6 @@ io.use(
         handshake: true,
         auth_header_required: true
         
-    }, 
-    function (err, req, res, next) {
-        console.log("ERRROREE");
-        if (err.name === 'UnauthorizedError') {
-            
-            res.status(401).send('invalid token...');
-        }
     }
     
     )

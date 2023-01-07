@@ -88,7 +88,7 @@ function Chat() {
             socket.current = io(BASE_URL, 
                 { 
                     query: { type: 'chat' },
-                    extraHeaders: { Authorization: `Bearer ${1}`}
+                    extraHeaders: { Authorization: `Bearer ${token}`}
                 }
                 );
             console.log(currentUser);
