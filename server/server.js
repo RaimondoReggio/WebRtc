@@ -1,3 +1,8 @@
+
+const socketioJwt = require('socketio-jwt');
+
+const jwks = require('jwks-rsa');
+
 const express = require('express');
 const http = require('https');
 const cors = require('cors');
@@ -47,6 +52,8 @@ app.use(jwtCheck, function (err, req, res, next) {
         res.status(401).send('invalid token...');
     }
 });
+
+
 
 // Checks if user exist
 app.get('/checkIfUserExist', async(req, res) => {
@@ -218,6 +225,35 @@ app.post('/addContact', async(req, res) => {
         res.send("Unable to add contact");
     }
 });
+
+
+
+
+
+
+io.use(
+    socketioJwt.authorize({
+      secret: jwks.expressJwtSecret({
+        cache: true,
+        rateLimit: true,
+        jwksRequestsPerMinute: 5,
+        jwksUri: 'https://dev-bswl63fq86v48oa2.eu.auth0.com/.well-known/jwks.json'
+        }),
+        handshake: true,
+        auth_header_required: true
+        
+    }, 
+    function (err, req, res, next) {
+        console.log("ERRROREE");
+        if (err.name === 'UnauthorizedError') {
+            
+            res.status(401).send('invalid token...');
+        }
+    }
+    
+    )
+  );
+
 
 global.onlineUsers = new Map();
 let broadcasters = {};

@@ -83,12 +83,24 @@ function Chat() {
             });
         };
 
-        if(currentUser) {
-            getAllContacts();
-            socket.current = io(BASE_URL, { query: { type: 'chat' } });
+        const openSocket = async()=>{
+            const token = await getAccessTokenSilently();
+            socket.current = io(BASE_URL, 
+                { 
+                    query: { type: 'chat' },
+                    extraHeaders: { Authorization: `Bearer ${1}`}
+                }
+                );
             console.log(currentUser);
             socket.current.emit("add-user",currentUser.id);
+        };
+
+
+        if(currentUser) {
+            getAllContacts();
+            openSocket();
         }
+
     }, [currentUser]);
 
     // Change current chat
