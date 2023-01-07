@@ -32,7 +32,7 @@ const Contacts = ({contacts, currentUser, changeChat, notifications, notifyUser}
             <>
                 <div className="contacts-container">
                     <div className="contacts-content">
-                        { contacts.length > 0 && 
+                        { contacts.length > 0 ? 
                         <>
                         {contacts.map((contact, index) => {
                             return (
@@ -62,7 +62,9 @@ const Contacts = ({contacts, currentUser, changeChat, notifications, notifyUser}
                             );
                         })}
                         </>
-                        }
+                        : <> <h3>It's time to make new friends!</h3> </>}
+
+
                     </div>
                 </div>
             </>

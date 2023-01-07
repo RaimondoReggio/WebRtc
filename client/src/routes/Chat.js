@@ -6,6 +6,7 @@ import Content from "../general/content";
 import Header from "../general/header";
 import Contacts from "../partials/chat/contacts";
 import ChatContainer from "../partials/chat/chat-container";
+import {message } from "antd";
 
 function Chat() {
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
@@ -18,6 +19,16 @@ function Chat() {
     const [contacts,setContacts]= useState([]);
     const [currentChat,setCurrentChat] = useState();
     const [newMessages, setNewMessages] = useState([]);
+
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const error = (msg, duration) => {
+        messageApi.open({
+            type: 'error',
+            content: msg,
+            duration: duration,
+        });
+    };
 
     // Execute getUserData on mounting
     useEffect(() => {
@@ -65,7 +76,10 @@ function Chat() {
             }).then((response) => {
                 if(response.data != 'Unable to get contacts') {
                     setContacts(response.data);
-                } 
+                }else{
+                    console.log("Pls add contacts");
+                    error('Pls add contacts', 2);
+                }
             });
         };
 
@@ -88,14 +102,17 @@ function Chat() {
 
     return (
         <>
+
         <Header></Header>
         <Content>
+            {contextHolder}
             <div className="chat-container">
                 <div className="chat-content">
                     <div className="row" style={{height: '100%'}}>
                         <div className="col-md-4 contacts-column d-flex align-items-center justify-content-center">
                             <div className="card">
                                 <div className="card-body">
+                                    
                                     <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} notifications={newMessages} notifyUser={handleMessagesChange}/>
                                 </div>
                             </div>

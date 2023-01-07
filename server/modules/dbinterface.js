@@ -217,7 +217,11 @@ const getPossibleUsers = async (user_id) => {
                     native_l: user_info.new_l
                 },
                 {
-                new_l: user_info.native_l
+                    new_l: user_info.native_l
+                },
+                {
+                    user_id: {$ne : user_id}
+                    //non devo ritrovare me stesso
                 }
             ]
     }

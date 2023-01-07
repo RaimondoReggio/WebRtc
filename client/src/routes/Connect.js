@@ -48,6 +48,7 @@ function Connect(){
         <>
         <Header></Header>
         <Content>
+
         { users &&
             <>
             <div className="card" style={{width:'90%'}}> 
