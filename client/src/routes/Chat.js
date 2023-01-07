@@ -37,7 +37,7 @@ function Chat() {
         const getUserData = async() => {
             if(!localStorage.getItem("user-data")) {
                 const token = await getAccessTokenSilently();
-
+                
                 await Axios.get(BASE_URL+'/getUserData', {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -45,12 +45,12 @@ function Chat() {
                 }).then((response) => {
                     console.log(response.data);
                     if(response.data) {
-                        console.log(response.data);
                         const user_data = {
                             id: response.data.user_id,
                             username: response.data.username,
                             avatar_image: response.data.avatar_image,
                         }
+                        console.log(response.data.user_id);
                         localStorage.setItem('user-data', JSON.stringify(user_data));
                         setCurrentUser(user_data);
                     }
@@ -85,7 +85,8 @@ function Chat() {
 
         if(currentUser) {
             getAllContacts();
-            socket.current = io(BASE_URL);
+            socket.current = io(BASE_URL, { query: { type: 'chat' } });
+            console.log(currentUser);
             socket.current.emit("add-user",currentUser.id);
         }
     }, [currentUser]);

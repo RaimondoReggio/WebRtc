@@ -38,6 +38,7 @@ const io = socket(server,{
 
 const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages, getPossibleUsers, addContact, updateUserProfile} = require('./modules/dbinterface');
 const {jwtCheck} = require('./modules/jwt');
+const { Console } = require('console');
 
 // Return an error message if the jwt isn
 app.use(jwtCheck, function (err, req, res, next) {
@@ -219,21 +220,68 @@ app.post('/addContact', async(req, res) => {
 });
 
 global.onlineUsers = new Map();
+let broadcasters = {};
 
 io.on("connection",(socket)=>{
 
+    if(socket.handshake.query.type==="live"){
+
+
+        socket.on("register as broadcaster", function (room) {
+            console.log("register as broadcaster for room", room);
+        
+            broadcasters[room] = socket.id;
+        
+            socket.join(room);
+          });
+        
+          socket.on("register as viewer", function (user) {
+            console.log("register as viewer for room", user.room);
+        
+            socket.join(user.room);
+            user.id = socket.id;
+        
+            socket.to(broadcasters[user.room]).emit("new viewer", user);
+          });
+        
+          socket.on("candidate", function (id, event) {
+            socket.to(id).emit("candidate", socket.id, event);
+          });
+        
+          socket.on("offer", function (id, event) {
+            event.broadcaster.id = socket.id;
+            socket.to(id).emit("offer", event.broadcaster, event.sdp);
+          });
+        
+          socket.on("answer", function (event) {
+            socket.to(broadcasters[event.room]).emit("answer", socket.id, event.sdp);
+          });
+        
+          socket.on("liveMsg", function (event) {
+            console.log(event);
+            socket.to(event.room).emit("liveMsg", event.msg, event.user);
+          });
+
+
+
+    }else if(socket.handshake.query.type==="chat"){ // if(socket.handshake.query.myParam==="chat")
+        
+        socket.on("add-user",(userId)=>{
+            console.log("adduser "+ userId + ", " + socket.id);
+            onlineUsers.set(userId,socket.id);
+        });
+    
+        socket.on("send-msg",(data)=>{
+            console.log(data);
+            console.log(onlineUsers);
+            const sendUserSocket = onlineUsers.get(data.to);
+            if(sendUserSocket){
+                socket.to(sendUserSocket).emit("msg-receive",data);
+            }
+        });
+    }
     //global.chatSocket = socket;
 
-    socket.on("add-user",(userId)=>{
-        onlineUsers.set(userId,socket.id);
-    });
-
-    socket.on("send-msg",(data)=>{
-        console.log(data);
-        const sendUserSocket = onlineUsers.get(data.to);
-        if(sendUserSocket){
-            socket.to(sendUserSocket).emit("msg-receive",data);
-        }
-    });
+    
 });
  

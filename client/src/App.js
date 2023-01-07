@@ -11,6 +11,7 @@ import ProtectedRoutesUser from './general/auth/protected-route-user';
 import Chat from './routes/Chat';
 import Connect from './routes/Connect';
 import StrangerPage from './routes/StrangerPage';
+import Live from './routes/Live';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Route path="/chat" element={<ProtectedRoutesUser><Chat/></ProtectedRoutesUser>} />
         <Route path="/connect" element={<ProtectedRoutesUser><Connect /></ProtectedRoutesUser>} />
         <Route path="/strangerpage" element={<ProtectedRoutesUser><StrangerPage /></ProtectedRoutesUser>} />
+        <Route path="/live" element={<ProtectedRoutesUser><Live /></ProtectedRoutesUser>} />
       </Routes>
     </div>
   );
