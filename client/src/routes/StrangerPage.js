@@ -158,7 +158,7 @@ const StrangerPage = () => {
                                 <p className="mb-0">Wants to teach</p>
                                 </div>
                                 <div className="col-sm-9">
-                                <p className="text-muted mb-0">{native_l}</p>
+                                <p className="text-muted mb-0" style={{textTransform:'capitalize'}}>{native_l}</p>
                                 </div>
                             </div>
                             <hr />
@@ -167,7 +167,7 @@ const StrangerPage = () => {
                                 <p className="mb-0">Wants to learn</p>
                                 </div>
                                 <div className="col-sm-9">
-                                <p className="text-muted mb-0">{new_l}</p>
+                                <p className="text-muted mb-0" style={{textTransform:'capitalize'}}>{new_l}</p>
                                 </div>
                             </div>
                             <hr />

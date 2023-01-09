@@ -49,6 +49,8 @@ function Chat() {
                             id: response.data.user_id,
                             username: response.data.username,
                             avatar_image: response.data.avatar_image,
+                            native_l: response.data.native_l,
+                            new_l: response.data.new_l,
                         }
                         console.log(response.data.user_id);
                         localStorage.setItem('user-data', JSON.stringify(user_data));

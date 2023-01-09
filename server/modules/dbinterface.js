@@ -127,6 +127,36 @@ const getUserData = async (user_id) => {
     }
 }
 
+const getUsersInfo = async(users_id) =>{
+    const coll = "users";
+    
+    if(users_id){
+        
+        const users = [];
+        const query = {
+            user_id: { $in: users_id } ,
+        }
+        
+        const result = await findDocuments(coll, query);
+
+        if(result) {
+            result.forEach(item => {
+                const struct = {
+                    username: item.username,
+                    avatar_image: item.avatar_image,
+                    id: item.user_id,
+                }
+                users.push(struct)
+            });
+            return users;
+        } else {
+            return false;
+        }
+    }else{
+        return false;
+    }
+}
+
 const getContacts = async (user_id) => {
     const coll = "users";
 
@@ -322,4 +352,5 @@ module.exports = {
     getPossibleUsers,
     addContact,
     updateUserProfile,
+    getUsersInfo,
 }

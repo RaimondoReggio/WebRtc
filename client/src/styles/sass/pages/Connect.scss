@@ -4,7 +4,9 @@
         height: 80%;
         overflow: auto;
         .users {
+            width: 100%;
             .card-user {
+                margin-bottom: 2rem;
                 height: 230px;
                 box-shadow: none;
                 background-color: #dae8ff21;

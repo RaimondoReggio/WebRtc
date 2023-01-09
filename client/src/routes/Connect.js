@@ -52,7 +52,7 @@ function Connect(){
         italian: italy_flag,
         spanish: spain_flag,
         swedish: sweden_flag,
-        Spanish: spain_flag, 
+        english: england_flag,
     }
 
     return (
@@ -67,7 +67,7 @@ function Connect(){
                     <div className="users row">
                         {users.map((user, index) => {
                             return (
-                                <div className="col-md-4">
+                                <div className="col-md-4" key={index}>
                                     <div className="card card-user">
                                         <div className="card-body">
                                             <div className="flag-image">

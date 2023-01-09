@@ -374,53 +374,56 @@ nav.nav-header {
   width: 90%;
   height: 80%;
   overflow: auto; }
-  .connect-container .connect-content .users .card-user {
-    height: 230px;
-    box-shadow: none;
-    background-color: #dae8ff21; }
-    .connect-container .connect-content .users .card-user:hover {
-      box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
-      border: 2px solid #dae8ff; }
-      .connect-container .connect-content .users .card-user:hover .flag-image img {
-        transform: translate(0px, -10px); }
-    .connect-container .connect-content .users .card-user .card-body .flag-image {
-      width: 30px;
-      position: absolute;
-      top: 0.5rem;
-      right: 1rem; }
-      .connect-container .connect-content .users .card-user .card-body .flag-image img {
-        width: 100%;
-        transition: transform 300ms ease-out; }
-    .connect-container .connect-content .users .card-user .card-body .avatar {
-      width: 120px; }
-      .connect-container .connect-content .users .card-user .card-body .avatar img {
+  .connect-container .connect-content .users {
+    width: 100%; }
+    .connect-container .connect-content .users .card-user {
+      margin-bottom: 2rem;
+      height: 230px;
+      box-shadow: none;
+      background-color: #dae8ff21; }
+      .connect-container .connect-content .users .card-user:hover {
+        box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+        border: 2px solid #dae8ff; }
+        .connect-container .connect-content .users .card-user:hover .flag-image img {
+          transform: translate(0px, -10px); }
+      .connect-container .connect-content .users .card-user .card-body .flag-image {
+        width: 30px;
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem; }
+        .connect-container .connect-content .users .card-user .card-body .flag-image img {
+          width: 100%;
+          transition: transform 300ms ease-out; }
+      .connect-container .connect-content .users .card-user .card-body .avatar {
+        width: 120px; }
+        .connect-container .connect-content .users .card-user .card-body .avatar img {
+          width: 100%; }
+      .connect-container .connect-content .users .card-user .card-body .info-content {
         width: 100%; }
-    .connect-container .connect-content .users .card-user .card-body .info-content {
-      width: 100%; }
-      .connect-container .connect-content .users .card-user .card-body .info-content .username h4 {
-        text-align: left;
-        text-transform: capitalize; }
-      .connect-container .connect-content .users .card-user .card-body .info-content .language {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start; }
-        .connect-container .connect-content .users .card-user .card-body .info-content .language .native_l p {
-          font-size: 15px;
-          font-weight: bold;
-          margin-bottom: 0;
+        .connect-container .connect-content .users .card-user .card-body .info-content .username h4 {
+          text-align: left;
           text-transform: capitalize; }
-        .connect-container .connect-content .users .card-user .card-body .info-content .language .arrow .arrow-right {
-          margin-bottom: -10px;
-          color: #03CBB6; }
-        .connect-container .connect-content .users .card-user .card-body .info-content .language .arrow .arrow-left {
-          color: #03CBB6; }
-        .connect-container .connect-content .users .card-user .card-body .info-content .language .new_l p {
-          font-size: 15px;
-          font-weight: bold;
-          text-transform: capitalize; }
-      .connect-container .connect-content .users .card-user .card-body .info-content .biography p {
-        font-size: 12px;
-        text-align: justify; }
+        .connect-container .connect-content .users .card-user .card-body .info-content .language {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start; }
+          .connect-container .connect-content .users .card-user .card-body .info-content .language .native_l p {
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 0;
+            text-transform: capitalize; }
+          .connect-container .connect-content .users .card-user .card-body .info-content .language .arrow .arrow-right {
+            margin-bottom: -10px;
+            color: #03CBB6; }
+          .connect-container .connect-content .users .card-user .card-body .info-content .language .arrow .arrow-left {
+            color: #03CBB6; }
+          .connect-container .connect-content .users .card-user .card-body .info-content .language .new_l p {
+            font-size: 15px;
+            font-weight: bold;
+            text-transform: capitalize; }
+        .connect-container .connect-content .users .card-user .card-body .info-content .biography p {
+          font-size: 12px;
+          text-align: justify; }
 
 .live-chat-container {
   height: 100vh; }
@@ -499,10 +502,12 @@ nav.nav-header {
       width: 95%;
       height: 95%;
       border-radius: 20px; }
-      .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container {
-        height: 100%;
-        border-bottom: 1px solid #ccc;
-        overflow: hidden; }
+      .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body {
+        overflow: auto; }
+        .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container {
+          height: 100%;
+          border-bottom: 1px solid #ccc;
+          overflow: hidden; }
       .live-chat-container .live-chat-content .chat-container .chat-content .card .card-footer {
         padding-left: 10px;
         padding-right: 10px; }

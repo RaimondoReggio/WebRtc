@@ -2,6 +2,7 @@
 const socketioJwt = require('socketio-jwt');
 
 const jwks = require('jwks-rsa');
+const jwt = require('jsonwebtoken');
 
 const express = require('express');
 const http = require('https');
@@ -41,7 +42,7 @@ const io = socket(server,{
     }}
 );
 
-const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages, getPossibleUsers, addContact, updateUserProfile} = require('./modules/dbinterface');
+const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages, getPossibleUsers, addContact, updateUserProfile,getUsersInfo} = require('./modules/dbinterface');
 const {jwtCheck} = require('./modules/jwt');
 const { Console } = require('console');
 
@@ -202,7 +203,7 @@ app.post('/addMsg', async(req, res) => {
     const user_id = req.auth.sub; 
     const {to, message} = req.query;
 
-    const result = createMessage(message, user_id, to);
+    const result = await createMessage(message, user_id, to);
 
     if(result) {
         res.send("Message created");
@@ -216,8 +217,8 @@ app.post('/addContact', async(req, res) => {
     const user_id = req.auth.sub; 
     const {contact_id} = req.query;
 
-    const result1 = addContact(user_id, contact_id);
-    const result2 = addContact(contact_id, user_id);
+    const result1 = await addContact(user_id, contact_id);
+    const result2 = await addContact(contact_id, user_id);
 
     if(result1 && result2) {
         res.send("Contact added");
@@ -226,6 +227,27 @@ app.post('/addContact', async(req, res) => {
     }
 });
 
+app.get('/getPossibleLives', async(req, res) => {
+
+    const user_id = req.auth.sub; 
+    const learn_lang = req.query.native_l;
+
+    var filtered = Object.keys(broadcasters).reduce(function (filtered, key) {
+        if (broadcasters[key].native_l === learn_lang) filtered[key] = key;
+        return filtered;
+    }, {});
+
+    if(filtered){
+        var result = await getUsersInfo(Object.keys(filtered));
+        if(result) {
+            res.json(result);
+        } else {
+            res.send("Unable to retrive lives info");
+        }
+    }else{
+        res.send("Unable to get possible lives");
+    }
+});
 
 
 const socketJWTCheck = socketioJwt.authorize({
@@ -246,23 +268,36 @@ io.use(socketJWTCheck, (req,res) => {
 
 
 
-global.onlineUsers = new Map(); // Chat
+let onlineUsers = new Map(); // Chat
 let broadcasters = {}; // Live
 let liveUsers = {}; // Live
 
 io.on("connection",(socket)=>{
 
+    
+    var token = socket.handshake.headers.authorization;
+    token = token.substring(7, token.length);
+    var decoded = jwt.decode(token, {complete: true});
+    socket.realUserId = decoded.payload.sub; 
+    //estraggo dal jwt l'id auth0|xxxxxxxx e lo setto 
+    
+    
     if(socket.handshake.query.type==="live"){
 
 
-        socket.on("register as broadcaster", function (room) {
-            console.log("register as broadcaster for room", room);
-        
-            broadcasters[room] = socket.id;
-            socket.isBroadcaster = true;
-            socket.room = room;
+        socket.on("register as broadcaster", function (room, native_l) {
+            //console.log("reg as broad: " + room +", real: " + socket.realUserId);
+            //room è auth0 id mandato dal client
+            if(room===socket.realUserId){
+                console.log("register as broadcaster for room " + room + ", native_l " + native_l);
+                broadcasters[room] = {socketId: socket.id, native_l: native_l};
+                socket.isBroadcaster = true;
+                socket.room = room;
 
-            socket.join(room); 
+                socket.join(room); 
+            }
+
+            
           });
         
           socket.on("register as viewer", function (user) {
@@ -281,8 +316,8 @@ io.on("connection",(socket)=>{
             }
 
             liveUsers[user.room].push(user); // Stores all users in a room
-
-            socket.to(broadcasters[user.room]).emit("new viewer", user); // Used to establish connection beetween viewer and broadcaster
+            console.log(broadcasters[user.room]);
+            socket.to(broadcasters[user.room].socketId).emit("new viewer", user); // Used to establish connection beetween viewer and broadcaster
             socket.to(user.room).emit("add new viewer", user); // Send the new user to everyone except socket's user
           });
         
@@ -296,12 +331,16 @@ io.on("connection",(socket)=>{
           });
         
           socket.on("answer", function (event) {
-            socket.to(broadcasters[event.room]).emit("answer", socket.id, event.sdp);
+            //console.log(event.room); da undifined
+            console.log(broadcasters[event.room]);
+            socket.to(broadcasters[event.room].socketId).emit("answer", socket.id, event.sdp);
           });
         
           socket.on("liveMsg", function (event) {
-            console.log(event);
-            socket.to(event.room).emit("liveMsg", event.msg, event.user, event.avatar);
+            //console.log("liveMsg: " +  event);
+            //console.log("liveMsg2" + socket.room);
+            //event.room
+            socket.to(socket.room).emit("liveMsg", event.msg, event.user, event.avatar);
           });
 
           socket.on("disconnect", function() {
@@ -327,18 +366,34 @@ io.on("connection",(socket)=>{
     }else if(socket.handshake.query.type==="chat"){ // if(socket.handshake.query.myParam==="chat")
         
         socket.on("add-user",(userId)=>{
-            console.log("adduser "+ userId + ", " + socket.id);
-            onlineUsers.set(userId,socket.id);
+            if(userId===socket.realUserId){
+                console.log("adduser "+ userId + "," + socket.realUserId +", " + socket.id);
+                onlineUsers.set(userId,socket.id);
+                socket.userId = userId;
+            }
+            
         });
     
         socket.on("send-msg",(data)=>{
-            console.log(data);
-            console.log(onlineUsers);
-            const sendUserSocket = onlineUsers.get(data.to);
-            if(sendUserSocket){
-                socket.to(sendUserSocket).emit("msg-receive",data);
+            if(data.from===socket.realUserId){
+                console.log(data);
+                console.log(onlineUsers);
+                console.log("send-msg "+ data.from + "," + socket.realUserId);
+                const sendUserSocket = onlineUsers.get(data.to);
+                if(sendUserSocket){
+                    socket.to(sendUserSocket).emit("msg-receive",data);
+                }
             }
+
+            
         });
+        
+        socket.on("disconnect", function() {
+
+            onlineUsers.delete(socket.userId);
+            console.log(onlineUsers);
+
+          });
     }
     //global.chatSocket = socket;
 

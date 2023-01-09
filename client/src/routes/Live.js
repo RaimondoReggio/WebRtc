@@ -96,6 +96,8 @@ function Live(){
                             id: response.data.user_id,
                             username: response.data.username,
                             avatar_image: response.data.avatar_image,
+                            native_l: response.data.native_l,
+                            new_l: response.data.new_l,
                         }
                         localStorage.setItem('user-data', JSON.stringify(user_data));
                         setCurrentUser(user_data);
@@ -117,6 +119,9 @@ function Live(){
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
+                params:{
+                   native_l: currentUser.new_l
+                }
             }).then((response) => {
                 if(response.data){
                     setLives(response.data);
@@ -136,14 +141,21 @@ function Live(){
 
             socket.current.on("liveMsg", function (msg, user, avatar) {
 
-              const new_message = [...messages];
-              new_message.push({user: user ,avatar: avatar, msg: msg});
+              //const new_message = [...messages];
+              //new_message.push({user: user ,avatar: avatar, msg: msg});
+              //setMessages(new_message);
 
-              setMessages(new_message);
+              setMessages(messages => [...messages, {user: user ,avatar: avatar, msg: msg}]);  
+              //bisogna usare questo metodo, non si può usare push e setMessages(new_messages)
+              //dato che il listener .on(liveMsg) viene registrato in useEffect, 
+              //la lista messages sarà quella del momento in cui viene usato useEffect e non quella aggiornata
+
+              
             });
               
               
-              // message handlers
+              // message handlers, funzione del brodcaster
+              //BROADCASTER INVIA OFFER
               socket.current.on("new viewer", function (viewer) {
                 console.log(viewer);
                 
@@ -176,7 +188,8 @@ function Live(){
                       type: "offer",
                       sdp: sessionDescription,
                       broadcaster: {
-                        room: roomNumb.current,
+                        //room: roomNumb.current,
+                        room: currentUser.id,
                         name: currentUser.username,
                       },
                     });
@@ -214,10 +227,14 @@ function Live(){
                 
               });
               
+              //VIEWER RICEVER OFFER ED INVIA ANSWER
               socket.current.on("offer", function (broadcaster, sdp) {
                // broadcasterName.innerText = broadcaster.name + "is broadcasting...";
                 
-
+               //NOTA
+               //broadcaster.id viene aggiunto nella offer in node js
+               //NON e' l'id auth0, ma l'id socket.io
+                //broadcaster.room è l'id auth0 = stanza 
                 rtcPeerConnections[broadcaster.id] = new RTCPeerConnection(config);
               
                 rtcPeerConnections[broadcaster.id].setRemoteDescription(sdp);
@@ -231,7 +248,7 @@ function Live(){
                     socket.current.emit("answer", {
                       type: "answer",
                       sdp: sessionDescription,
-                      room: roomNumb.current,
+                      room: broadcaster.room,
                     });
                   });
               
@@ -265,7 +282,7 @@ function Live(){
         };
 
         if(currentUser) {
-            //getPossibleLives();
+            getPossibleLives();
 
             openSocket();
 
@@ -274,7 +291,8 @@ function Live(){
     
 
     const handleClickBroadcaster = () => {
-        if (roomNumb.current == undefined || !currentUser.username) {
+        // if (roomNumb.current == undefined || !currentUser.username) {
+          if (!currentUser.username) {
             alert("Please type a room number and a name");
           } else {
 
@@ -289,8 +307,9 @@ function Live(){
                 videoElement.srcObject = stream;
                 videoElement.volume = 0;
                 var factor = "-1";
-                //videoElement.style.transform       = "scaleX(" + factor + ")";
-                socket.current.emit("register as broadcaster", roomNumb.current);
+                videoElement.style.transform       = "scaleX(" + factor + ")";
+                socket.current.emit("register as broadcaster", currentUser.id, currentUser.native_l);
+                //socket.current.emit("register as broadcaster", roomNumb.current);
               })
               .catch(function (err) {
                 console.log("An error ocurred when accessing media devices", err);
@@ -298,20 +317,20 @@ function Live(){
           }
     }
 
-    const handleClickViewer = () => {
-        if (roomNumb.current == undefined || !currentUser.username) {
+    const handleClickViewer = (room) => {
+        if (!currentUser.username || !room) {
             alert("Please type a room number and a name");
           } else {
 
             setRoomSelected(true);
         
-            socket.current.emit("register as viewer", {room: roomNumb.current, id:currentUser.id, name:currentUser.username, avatar: currentUser.avatar_image});
+            socket.current.emit("register as viewer", {room: room, id:currentUser.id, name:currentUser.username, avatar: currentUser.avatar_image});
           }
     }
 
     const handleSendMessage = () => {
       const data = {
-        room: roomNumb.current,
+        //room: roomNumb.current,
         user: currentUser.username,
         avatar: currentUser.avatar_image,
         msg: message,
@@ -338,10 +357,29 @@ function Live(){
             <Header></Header>
             <Content>
             <div id="selectRoom">
-                <label htmlFor="roomNumber">Type the room number</label>
-                <input id="roomNumber" type="text" onChange={(e)=>{roomNumb.current=e.target.value}} />
+                {/*<label htmlFor="roomNumber">Type the room number</label>
+                <input id="roomNumber" type="text" onChange={(e)=>{roomNumb.current=e.target.value}} />  */}
                 <button id="joinBroadcaster" onClick={()=>handleClickBroadcaster()}>Join as Broadcaster</button>
-                <button id="joinViewer" onClick={()=>handleClickViewer()}>Join as Viewer</button>
+                {/*<button id="joinViewer" onClick={()=>handleClickViewer()}>Join as Viewer</button>*/}
+
+                {lives && lives.map((live, index) => {
+                                return (
+                                  <div key={live.id} className="participant mb-4">
+                                    <div className="card partecipant-card">
+                                      <div className="card-body">
+                                        <div className="avatar">
+                                          <img src={live.avatar} />
+                                        </div>
+                                        <div className="username">
+                                          <p>{live.username}</p>
+                                        </div>
+                                        <button id="joinViewer" onClick={()=>handleClickViewer(live.id)}>Join {live.id}</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+
             </div>
             </Content>
             </>
@@ -349,7 +387,7 @@ function Live(){
               <div className="live-chat-container">
                 <div className="live-chat-content">
                   <div className="row" style={{height: '100%'}}>
-                    <div className="col-md-2 partecipants-container d-flex align-items-center justify-content-center" style={{width: '20%'}}>
+                    <div className="col-md-2 partecipants-container d-flex align-items-center justify-content-center" style={{width: '20%', height:'100%'}}>
                       <div className="card">
                         <div className="card-header">
                             <div className="title mt-3">
@@ -380,7 +418,7 @@ function Live(){
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-7" style={{width: '60%'}}>
+                    <div className="col-md-7" style={{width: '60%', height:'100%'}}>
                       <div className="main-section-container">
                         <div className="main-section-content">
                           <div className="card">
@@ -403,7 +441,7 @@ function Live(){
                       </div>
 
                     </div>
-                    <div className="col-md-3" style={{width: '20%'}}>
+                    <div className="col-md-3" style={{width: '20%', height:'100%'}}>
                       <div className="chat-container">
                         <div className="chat-content d-flex align-items-center justify-content-center">
                           <div className="card">
@@ -414,19 +452,21 @@ function Live(){
                                   <>
                                   {messages.map((message, index) => {
                                     return (
-                                      <>
-                                      <div className="message-avatar">
-                                        <img src={message.avatar} />
-                                      </div>
-                                      <div className="message-content">
-                                        <div className="username">
-                                          <p><strong>{message.user}</strong></p>
+                                      <div key={index}>
+                                        <>
+                                        <div className="message-avatar">
+                                          <img src={message.avatar} />
                                         </div>
-                                        <div className="message-text">
-                                          <p>{message.msg}</p>
+                                        <div className="message-content">
+                                          <div className="username">
+                                            <p><strong>{message.user}</strong></p>
+                                          </div>
+                                          <div className="message-text">
+                                            <p>{message.msg}</p>
+                                          </div>
                                         </div>
+                                        </>
                                       </div>
-                                      </>
                                     );
                                   })}
                                   </>
