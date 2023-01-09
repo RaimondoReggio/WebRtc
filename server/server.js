@@ -228,24 +228,22 @@ app.post('/addContact', async(req, res) => {
 
 
 
-
-
-
-io.use(
-    socketioJwt.authorize({
-      secret: jwks.expressJwtSecret({
+const socketJWTCheck = socketioJwt.authorize({
+    secret: jwks.expressJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
         jwksUri: 'https://dev-bswl63fq86v48oa2.eu.auth0.com/.well-known/jwks.json'
-        }),
-        handshake: true,
-        auth_header_required: true
-        
-    }
-    
-    )
-  );
+    }),
+    handshake: true,
+    auth_header_required: true
+});
+
+
+io.use(socketJWTCheck, (req,res) => {
+    console.log('prova');
+});
+
 
 
 global.onlineUsers = new Map();

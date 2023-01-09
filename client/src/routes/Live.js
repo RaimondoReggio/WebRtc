@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, createElement } from "react";
 import Axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import {io} from 'socket.io-client';
 import Header from "../general/header";
 import { useNavigate } from 'react-router-dom'
 import Content from "../general/content";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPhoneSlash, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import NewUser from "../partials/live/new-user";
 
 function Live(){
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
@@ -20,6 +23,8 @@ function Live(){
 
     const [roomSelected, setRoomSelected] = useState(false);
     const roomNumb = useRef();
+
+    const [live_users, setLiveUsers] = useState([]);
 
     //client
     //const [rtcPeerConnections, setRtcPeerConnections] = useState({});
@@ -53,7 +58,7 @@ function Live(){
 
     
     const broadcasterName = document.getElementById("broadcasterName");
-    const viewers = document.getElementById("viewers");
+    //const viewers = document.getElementById("viewers");
 
 
     useEffect(() => {
@@ -112,12 +117,11 @@ function Live(){
                     extraHeaders: { Authorization: `Bearer ${token}`}
                 }
                 );
-            console.log(currentUser);
 
             socket.current.on("liveMsg", function (msg, user) {
                 let li = document.createElement("li");
                 li.innerText = user + ": "+msg;
-                viewers.appendChild(li);
+                //viewers.appendChild(li);
               });
               
               
@@ -163,10 +167,11 @@ function Live(){
                     console.log(error);
                   });
 
-                  
-              
-                let li = document.createElement("li");
-                li.innerText = viewer.name + " has joined";
+                console.log(live_users);  
+                setLiveUsers([...live_users, viewer]);  
+                 
+                //let li = document.createElement("li");
+                //li.innerText = viewer.name + " has joined";
                 //viewers.appendChild(li);
               });
               
@@ -290,11 +295,11 @@ function Live(){
               socket.current.emit("liveMsg", e);
               let li = document.createElement("li");
               li.innerText = e.user + ": "+e.msg;
-              viewers.appendChild(li);
+              //viewers.appendChild(li);
             };
             document.body.appendChild(btn);
         
-            socket.current.emit("register as viewer", {room: roomNumb.current, name:currentUser.username});
+            socket.current.emit("register as viewer", {room: roomNumb.current, id:currentUser.id, name:currentUser.username, avatar: currentUser.avatar_image});
           }
     }
 
@@ -304,22 +309,108 @@ function Live(){
 
     return (
         <>
-        <Header></Header>
-        <Content>
             <>
             {!roomSelected ? 
+            <>
+            <Header></Header>
+            <Content>
             <div id="selectRoom">
                 <label htmlFor="roomNumber">Type the room number</label>
                 <input id="roomNumber" type="text" onChange={(e)=>{roomNumb.current=e.target.value}} />
                 <button id="joinBroadcaster" onClick={()=>handleClickBroadcaster()}>Join as Broadcaster</button>
                 <button id="joinViewer" onClick={()=>handleClickViewer()}>Join as Viewer</button>
             </div>
+            </Content>
+            </>
             :
-            <div id="consultingRoom">
-                <video autoPlay id="myVideo"></video>
-                <p id="broadcasterName">{currentUser.username} is broadcasting...</p>
-                <ul id="viewers"></ul>
-            </div>
+              <div className="live-chat-container">
+                <div className="live-chat-content">
+                  <div className="row" style={{height: '100%'}}>
+                    <div className="col-md-2 partecipants-container d-flex align-items-center justify-content-center" style={{width: '20%'}}>
+                      <div className="card">
+                        <div className="card-header">
+                            <div className="title mt-3">
+                              <h4>Partecipants</h4>
+                            </div>
+                        </div>
+                        <div className="card-body main-card-body">
+                          <div className="participants-list-container">
+                            <div className="participants-list-content">
+                              {live_users.map((viewer, index) => {console.log(live_users); 
+                                return (
+                                  <div key={viewer.id} className="participant mb-4">
+                                    <div className="card partecipant-card">
+                                      <div className="card-body">
+                                        <div className="avatar">
+                                          <img src={viewer.avatar} />
+                                        </div>
+                                        <div className="username">
+                                          <p>{viewer.name}</p>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-7" style={{width: '60%'}}>
+                      <div className="main-section-container">
+                        <div className="main-section-content">
+                          <div className="card">
+                            <div className="card-body">
+                              <div className="video-container">
+                                <div className="video">
+                                  <video autoPlay id="myVideo"></video>
+                                </div>
+                              </div>
+                              <div className="endcall-button-container">
+                                <div className="endcall-button">
+                                  <button className="btn">
+                                    <FontAwesomeIcon icon={faPhoneSlash}></FontAwesomeIcon>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div className="col-md-3" style={{width: '20%'}}>
+                      <div className="chat-container">
+                        <div className="chat-content d-flex align-items-center justify-content-center">
+                          <div className="card">
+                            <div className="card-body">
+                              <div className="message-container mb-2">
+                                <div className="messages">
+                                  <div className="message-avatar">
+                                    <img />
+                                  </div>
+                                  <div className="message-content">
+                                    <p></p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="card-footer">
+                              <div className="message-input">
+                                <input type="text" placeholder='type your message here'/>
+                                <button className='submit btn' type='submit' >
+                                  <FontAwesomeIcon className="icon" icon={faPaperPlane}/>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             }
             
@@ -327,7 +418,6 @@ function Live(){
             
 
             </>
-        </Content>
         </>
         
     );

@@ -91,7 +91,6 @@ function Chat() {
                     extraHeaders: { Authorization: `Bearer ${token}`}
                 }
                 );
-            console.log(currentUser);
             socket.current.emit("add-user",currentUser.id);
         };
 

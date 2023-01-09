@@ -1,0 +1,154 @@
+.live-chat-container {
+    height: 100vh;
+    .live-chat-content {
+        height: 100%;
+        .partecipants-container {
+            .card {
+                width: 95%;
+                height: 95%;
+                border-radius: 20px;
+                .card-header {
+
+                }
+                .main-card-body {
+                    padding: 0;
+                    .participants-list-container {
+                        display: flex;
+                        width: 100%;
+                        justify-content: center;
+                        margin-top: 2rem;
+                        overflow: auto;
+                        .participants-list-content {
+                            width: 95%;
+                            .participant {
+                                .partecipant-card {
+                                    width: 100%;
+                                    height: 100%;
+                                    box-shadow: none;
+                                    background-color: #dae8ff21;
+                                    border: 2px solid #dae8ff;
+                                    &:hover {
+                                        box-shadow: 0 2px 15px -3px rgba(0, 0, 0,  0.07%), 0 10px 20px -2px rgba(0, 0, 0, 0.04%);
+                                    }
+                                    .card-body {
+                                        display: flex;
+                                        align-items: center;
+                                        padding: 1rem;
+                                        .avatar {
+                                            width: 50px;
+                                            margin-right: 1rem;
+                                            img {
+                                                width: 100%;
+                                            }
+                                        }
+                                        .username {
+                                            max-width: 100px;
+                                            p {
+                                                margin-bottom: 0;
+                                                font-weight: bold;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .main-section-container {
+            height: 100%;
+            background-color: rgba(247, 247, 247, 0.256);
+            .main-section-content {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                .card {
+                    height: 96%;
+                    width: 100%;
+                    border-radius: 20px;
+                    .card-body {
+                        padding: 0;
+                        .video-container {
+                            .video {
+                                border-top-left-radius: 20px;
+                                border-top-right-radius: 20px;
+                                height: 600px;
+                                overflow: hidden;
+                                video {
+                                    width: 100%;
+                                }
+                            }
+                        }
+                        .endcall-button-container {
+                            display: flex;
+                            justify-content: center;
+                            margin-top: 2.5rem;
+                            .endcall-button {
+                                button {
+                                    border-radius: 100%;
+                                    padding: 1.5rem;
+                                    font-size: 20px;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    color: #fff;
+                                    background-color: $green;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .chat-container {
+            .chat-content {
+                .card {
+                    width: 95%;
+                    height: 95%;
+                    border-radius: 20px;
+                    .card-body {
+                        .messages-container {
+                            height: 100%;
+                            border-bottom: 1px solid #ccc;
+                            overflow: hidden;
+                            .message {
+                                .message-avatar {
+        
+                                }
+                                .message-content {
+        
+                                }
+                            }
+                        }
+                    }
+                    .card-footer {
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        .message-input {
+                            display: flex;
+                            justify-content: space-between;
+                            padding-right: 5px;
+                            padding-left: 5px;
+                            input {
+                                width: 80%;
+                                border: 0;
+                                &:focus-visible {
+                                    outline: none;
+                                }
+                            }
+                            button {
+                                border-radius: 100%;
+                                padding: 10px;
+                                color: $green;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

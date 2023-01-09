@@ -369,3 +369,157 @@ nav.nav-header {
           padding: 0; }
     .chat-container .chat-content .chat-column {
       height: 100%; }
+
+.connect-container .connect-content {
+  width: 90%;
+  height: 80%;
+  overflow: auto; }
+  .connect-container .connect-content .users .card-user {
+    height: 230px;
+    box-shadow: none;
+    background-color: #dae8ff21; }
+    .connect-container .connect-content .users .card-user:hover {
+      box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+      border: 2px solid #dae8ff; }
+      .connect-container .connect-content .users .card-user:hover .flag-image img {
+        transform: translate(0px, -10px); }
+    .connect-container .connect-content .users .card-user .card-body .flag-image {
+      width: 30px;
+      position: absolute;
+      top: 0.5rem;
+      right: 1rem; }
+      .connect-container .connect-content .users .card-user .card-body .flag-image img {
+        width: 100%;
+        transition: transform 300ms ease-out; }
+    .connect-container .connect-content .users .card-user .card-body .avatar {
+      width: 120px; }
+      .connect-container .connect-content .users .card-user .card-body .avatar img {
+        width: 100%; }
+    .connect-container .connect-content .users .card-user .card-body .info-content {
+      width: 100%; }
+      .connect-container .connect-content .users .card-user .card-body .info-content .username h4 {
+        text-align: left;
+        text-transform: capitalize; }
+      .connect-container .connect-content .users .card-user .card-body .info-content .language {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; }
+        .connect-container .connect-content .users .card-user .card-body .info-content .language .native_l p {
+          font-size: 15px;
+          font-weight: bold;
+          margin-bottom: 0;
+          text-transform: capitalize; }
+        .connect-container .connect-content .users .card-user .card-body .info-content .language .arrow .arrow-right {
+          margin-bottom: -10px;
+          color: #03CBB6; }
+        .connect-container .connect-content .users .card-user .card-body .info-content .language .arrow .arrow-left {
+          color: #03CBB6; }
+        .connect-container .connect-content .users .card-user .card-body .info-content .language .new_l p {
+          font-size: 15px;
+          font-weight: bold;
+          text-transform: capitalize; }
+      .connect-container .connect-content .users .card-user .card-body .info-content .biography p {
+        font-size: 12px;
+        text-align: justify; }
+
+.live-chat-container {
+  height: 100vh; }
+  .live-chat-container .live-chat-content {
+    height: 100%; }
+    .live-chat-container .live-chat-content .partecipants-container .card {
+      width: 95%;
+      height: 95%;
+      border-radius: 20px; }
+      .live-chat-container .live-chat-content .partecipants-container .card .main-card-body {
+        padding: 0; }
+        .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container {
+          display: flex;
+          width: 100%;
+          justify-content: center;
+          margin-top: 2rem;
+          overflow: auto; }
+          .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content {
+            width: 95%; }
+            .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content .participant .partecipant-card {
+              width: 100%;
+              height: 100%;
+              box-shadow: none;
+              background-color: #dae8ff21;
+              border: 2px solid #dae8ff; }
+              .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content .participant .partecipant-card:hover {
+                box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04); }
+              .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content .participant .partecipant-card .card-body {
+                display: flex;
+                align-items: center;
+                padding: 1rem; }
+                .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content .participant .partecipant-card .card-body .avatar {
+                  width: 50px;
+                  margin-right: 1rem; }
+                  .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content .participant .partecipant-card .card-body .avatar img {
+                    width: 100%; }
+                .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content .participant .partecipant-card .card-body .username {
+                  max-width: 100px; }
+                  .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content .participant .partecipant-card .card-body .username p {
+                    margin-bottom: 0;
+                    font-weight: bold; }
+    .live-chat-container .live-chat-content .main-section-container {
+      height: 100%;
+      background-color: rgba(247, 247, 247, 0.256); }
+      .live-chat-container .live-chat-content .main-section-container .main-section-content {
+        height: 100%;
+        display: flex;
+        align-items: center; }
+        .live-chat-container .live-chat-content .main-section-container .main-section-content .card {
+          height: 96%;
+          width: 100%;
+          border-radius: 20px; }
+          .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body {
+            padding: 0; }
+            .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .video-container .video {
+              border-top-left-radius: 20px;
+              border-top-right-radius: 20px;
+              height: 600px;
+              overflow: hidden; }
+              .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .video-container .video video {
+                width: 100%; }
+            .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .endcall-button-container {
+              display: flex;
+              justify-content: center;
+              margin-top: 2.5rem; }
+              .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .endcall-button-container .endcall-button button {
+                border-radius: 100%;
+                padding: 1.5rem;
+                font-size: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #fff;
+                background-color: #03CBB6; }
+    .live-chat-container .live-chat-content .chat-container .chat-content .card {
+      width: 95%;
+      height: 95%;
+      border-radius: 20px; }
+      .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container {
+        height: 100%;
+        border-bottom: 1px solid #ccc;
+        overflow: hidden; }
+      .live-chat-container .live-chat-content .chat-container .chat-content .card .card-footer {
+        padding-left: 10px;
+        padding-right: 10px; }
+        .live-chat-container .live-chat-content .chat-container .chat-content .card .card-footer .message-input {
+          display: flex;
+          justify-content: space-between;
+          padding-right: 5px;
+          padding-left: 5px; }
+          .live-chat-container .live-chat-content .chat-container .chat-content .card .card-footer .message-input input {
+            width: 80%;
+            border: 0; }
+            .live-chat-container .live-chat-content .chat-container .chat-content .card .card-footer .message-input input:focus-visible {
+              outline: none; }
+          .live-chat-container .live-chat-content .chat-container .chat-content .card .card-footer .message-input button {
+            border-radius: 100%;
+            padding: 10px;
+            color: #03CBB6;
+            display: flex;
+            justify-content: center;
+            align-items: center; }

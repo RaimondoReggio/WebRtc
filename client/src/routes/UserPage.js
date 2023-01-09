@@ -472,8 +472,8 @@ const Profile = () => {
                                                 label: 'Italian',
                                             },
                                             {
-                                                value: 'Spanish',
-                                                label: 'spanish',
+                                                value: 'spanish',
+                                                label: 'Spanish',
                                             },
                                             {
                                                 value: 'swedish',
