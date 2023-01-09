@@ -246,8 +246,9 @@ io.use(socketJWTCheck, (req,res) => {
 
 
 
-global.onlineUsers = new Map();
-let broadcasters = {};
+global.onlineUsers = new Map(); // Chat
+let broadcasters = {}; // Live
+let liveUsers = {}; // Live
 
 io.on("connection",(socket)=>{
 
@@ -258,8 +259,10 @@ io.on("connection",(socket)=>{
             console.log("register as broadcaster for room", room);
         
             broadcasters[room] = socket.id;
-        
-            socket.join(room);
+            socket.isBroadcaster = true;
+            socket.room = room;
+
+            socket.join(room); 
           });
         
           socket.on("register as viewer", function (user) {
@@ -267,8 +270,20 @@ io.on("connection",(socket)=>{
         
             socket.join(user.room);
             user.id = socket.id;
-        
-            socket.to(broadcasters[user.room]).emit("new viewer", user);
+            socket.room = user.room;
+
+            if(liveUsers[user.room]) {
+                socket.emit("old users", liveUsers[user.room]); // Send list of users in the same room to the socket's user
+            }
+
+            if(!liveUsers[user.room]) {
+                liveUsers[user.room] = [];
+            }
+
+            liveUsers[user.room].push(user); // Stores all users in a room
+
+            socket.to(broadcasters[user.room]).emit("new viewer", user); // Used to establish connection beetween viewer and broadcaster
+            socket.to(user.room).emit("add new viewer", user); // Send the new user to everyone except socket's user
           });
         
           socket.on("candidate", function (id, event) {
@@ -286,7 +301,25 @@ io.on("connection",(socket)=>{
         
           socket.on("liveMsg", function (event) {
             console.log(event);
-            socket.to(event.room).emit("liveMsg", event.msg, event.user);
+            socket.to(event.room).emit("liveMsg", event.msg, event.user, event.avatar);
+          });
+
+          socket.on("disconnect", function() {
+            if(!socket.isBroadcaster && liveUsers[socket.room]) {
+                liveUsers[socket.room] = liveUsers[socket.room].filter(item => item.id != socket.id);
+            }
+
+            if(socket.isBroadcaster) {
+                console.log('broad-disc');
+                socket.to(socket.room).emit("broadcaster disconnected");
+                delete broadcasters[socket.room];
+            } else {
+                console.log('user-disc')
+                socket.to(socket.room).emit("remove viewer", liveUsers[socket.room]);
+            }
+
+            socket.leave(socket.room);
+
           });
 
 

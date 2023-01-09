@@ -74,7 +74,6 @@ const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notificati
     useEffect(() => {
         if(socket.current) {
             socket.current.on("msg-receive", (data) => {
-                console.log(data);
                 if(data.from === currentChat.id) {
                     setArrivalMessage({fromSelf: false, message: data.message});
                 } else {

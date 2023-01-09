@@ -12,19 +12,35 @@ import NewUser from "../partials/live/new-user";
 function Live(){
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
+    // Retrives token
     const {getAccessTokenSilently} = useAuth0();
 
     const navigate = useNavigate();
 
+    // Socket objecy
     const socket = useRef();
-
+    
+    // Current User
     const [currentUser,setCurrentUser] = useState();
-    const [lives, setLives] = useState();
 
+    // Get matched lives
+    const [lives, setLives] = useState();
+    
+    // Change displayed html
     const [roomSelected, setRoomSelected] = useState(false);
     const roomNumb = useRef();
 
+    // Partecipants in live
     const [live_users, setLiveUsers] = useState([]);
+
+    // Single message
+    const [message, setMessage] = useState('');
+
+    // Messages
+    const [messages, setMessages] = useState([]);
+
+    // Check if user is a broadcaster
+    const [is_broadcaster, setIsBroadcaster] = useState(false);
 
     //client
     //const [rtcPeerConnections, setRtcPeerConnections] = useState({});
@@ -118,11 +134,13 @@ function Live(){
                 }
                 );
 
-            socket.current.on("liveMsg", function (msg, user) {
-                let li = document.createElement("li");
-                li.innerText = user + ": "+msg;
-                //viewers.appendChild(li);
-              });
+            socket.current.on("liveMsg", function (msg, user, avatar) {
+
+              const new_message = [...messages];
+              new_message.push({user: user ,avatar: avatar, msg: msg});
+
+              setMessages(new_message);
+            });
               
               
               // message handlers
@@ -166,13 +184,24 @@ function Live(){
                   .catch((error) => {
                     console.log(error);
                   });
-
-                console.log(live_users);  
-                setLiveUsers([...live_users, viewer]);  
                  
-                //let li = document.createElement("li");
-                //li.innerText = viewer.name + " has joined";
-                //viewers.appendChild(li);
+              });
+
+              socket.current.on('add new viewer', function(viewer) {
+                setLiveUsers(live_users => [...live_users, viewer]);  
+              }); 
+
+              socket.current.on('old users', function(viewers) {
+                setLiveUsers(viewers);
+              });
+
+              socket.current.on('remove viewer', function(viewers) {
+                setLiveUsers(viewers);
+              });
+
+              socket.current.on('broadcaster disconnected', function() {
+                console.log('broad-disc');
+                navigate(0);
               });
               
               socket.current.on("candidate", function (id, event) {
@@ -251,10 +280,7 @@ function Live(){
 
             setRoomSelected(true);
         
-            /*divSelectRoom.style = "display: none;";
-            divConsultingRoom.style = "display: block;";*/
-            //broadcasterName.innerText = user.name + " is broadcasting...";
-            
+            setIsBroadcaster(true);    
 
             navigator.mediaDevices
               .getUserMedia(streamConstraints)
@@ -278,29 +304,26 @@ function Live(){
           } else {
 
             setRoomSelected(true);
-
-            var input = document.createElement("input");
-            input.setAttribute('type', 'text');
-        
-            document.body.appendChild(input);
-        
-            var btn = document.createElement("button");
-        
-            btn.onclick = function () {
-              let e = {
-                room: roomNumb.current,
-                user: currentUser.username,
-                msg: input.value,
-              };
-              socket.current.emit("liveMsg", e);
-              let li = document.createElement("li");
-              li.innerText = e.user + ": "+e.msg;
-              //viewers.appendChild(li);
-            };
-            document.body.appendChild(btn);
         
             socket.current.emit("register as viewer", {room: roomNumb.current, id:currentUser.id, name:currentUser.username, avatar: currentUser.avatar_image});
           }
+    }
+
+    const handleSendMessage = () => {
+      const data = {
+        room: roomNumb.current,
+        user: currentUser.username,
+        avatar: currentUser.avatar_image,
+        msg: message,
+      };
+
+      socket.current.emit("liveMsg", data);
+      
+      const new_message = [...messages];
+      new_message.push({user: currentUser.username, avatar: currentUser.avatar_image, msg: message});
+      setMessages(new_message);
+
+      setMessage('');
     }
 
 
@@ -336,7 +359,7 @@ function Live(){
                         <div className="card-body main-card-body">
                           <div className="participants-list-container">
                             <div className="participants-list-content">
-                              {live_users.map((viewer, index) => {console.log(live_users); 
+                              {live_users.map((viewer, index) => {
                                 return (
                                   <div key={viewer.id} className="participant mb-4">
                                     <div className="card partecipant-card">
@@ -369,7 +392,7 @@ function Live(){
                               </div>
                               <div className="endcall-button-container">
                                 <div className="endcall-button">
-                                  <button className="btn">
+                                  <button className="btn" onClick={() => {navigate(0)}}>
                                     <FontAwesomeIcon icon={faPhoneSlash}></FontAwesomeIcon>
                                   </button>
                                 </div>
@@ -387,23 +410,40 @@ function Live(){
                             <div className="card-body">
                               <div className="message-container mb-2">
                                 <div className="messages">
-                                  <div className="message-avatar">
-                                    <img />
-                                  </div>
-                                  <div className="message-content">
-                                    <p></p>
-                                  </div>
+                                  { messages && 
+                                  <>
+                                  {messages.map((message, index) => {
+                                    return (
+                                      <>
+                                      <div className="message-avatar">
+                                        <img src={message.avatar} />
+                                      </div>
+                                      <div className="message-content">
+                                        <div className="username">
+                                          <p><strong>{message.user}</strong></p>
+                                        </div>
+                                        <div className="message-text">
+                                          <p>{message.msg}</p>
+                                        </div>
+                                      </div>
+                                      </>
+                                    );
+                                  })}
+                                  </>
+                                  }
                                 </div>
                               </div>
                             </div>
+                            {!is_broadcaster &&
                             <div className="card-footer">
                               <div className="message-input">
-                                <input type="text" placeholder='type your message here'/>
-                                <button className='submit btn' type='submit' >
+                                <input type="text" placeholder='type your message here' value={message} onChange={(e) => setMessage(e.target.value)}/>
+                                <button className='submit btn' type='submit' onClick={() => handleSendMessage()}>
                                   <FontAwesomeIcon className="icon" icon={faPaperPlane}/>
                                 </button>
                               </div>
                             </div>
+                            }
                           </div>
                         </div>
                       </div>
