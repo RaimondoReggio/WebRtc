@@ -12,12 +12,13 @@
                 }
                 .main-card-body {
                     padding: 0;
+                    overflow: auto;
+                    height: 100%;
                     .participants-list-container {
                         display: flex;
                         width: 100%;
                         justify-content: center;
                         margin-top: 2rem;
-                        overflow: auto;
                         .participants-list-content {
                             width: 95%;
                             .participant {
@@ -69,11 +70,13 @@
                     border-radius: 20px;
                     .card-body {
                         padding: 0;
+                        height: 100%;
                         .video-container {
+                            height: 80%;
                             .video {
                                 border-top-left-radius: 20px;
                                 border-top-right-radius: 20px;
-                                height: 600px;
+                                height: 100%;
                                 overflow: hidden;
                                 video {
                                     width: 100%;
@@ -83,7 +86,8 @@
                         .endcall-button-container {
                             display: flex;
                             justify-content: center;
-                            margin-top: 2.5rem;
+                            height: 20%;
+                            align-items: center;
                             .endcall-button {
                                 button {
                                     border-radius: 100%;
@@ -111,14 +115,44 @@
                         overflow: auto;
                         .messages-container {
                             height: 100%;
-                            border-bottom: 1px solid #ccc;
-                            overflow: hidden;
-                            .message {
-                                .message-avatar {
-        
-                                }
-                                .message-content {
-        
+                            .messages {
+                                .message-item {
+                                    display: flex;
+                                    position: relative;
+                                    .message-avatar {
+                                        width: 50px;
+                                        position: absolute;
+                                        bottom: -2rem;
+                                        img {
+                                            width: 100%;
+                                        }
+                                    }
+                                    .message-container {
+                                        padding: 0.5rem;
+                                        padding-left: 1rem;
+                                        border-radius: 10px;
+                                        display: flex;
+                                        align-items: center;
+                                        margin-left: calc(50px + 1rem);
+                                        background-color: $green;
+                                        border-bottom-left-radius: 0;
+                                        justify-content: left;
+                                        width: 100%;
+                                        .message-content {
+                                            max-width: 100%;
+                                            .username {
+                                                p {
+                                                    margin-bottom: 0;
+                                                }
+                                            }
+                                            .message-text {
+                                                p {
+                                                    margin-bottom: 0;
+                                                    color: $white;
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

@@ -434,13 +434,14 @@ nav.nav-header {
       height: 95%;
       border-radius: 20px; }
       .live-chat-container .live-chat-content .partecipants-container .card .main-card-body {
-        padding: 0; }
+        padding: 0;
+        overflow: auto;
+        height: 100%; }
         .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container {
           display: flex;
           width: 100%;
           justify-content: center;
-          margin-top: 2rem;
-          overflow: auto; }
+          margin-top: 2rem; }
           .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content {
             width: 95%; }
             .live-chat-container .live-chat-content .partecipants-container .card .main-card-body .participants-list-container .participants-list-content .participant .partecipant-card {
@@ -477,18 +478,22 @@ nav.nav-header {
           width: 100%;
           border-radius: 20px; }
           .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body {
-            padding: 0; }
-            .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .video-container .video {
-              border-top-left-radius: 20px;
-              border-top-right-radius: 20px;
-              height: 600px;
-              overflow: hidden; }
-              .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .video-container .video video {
-                width: 100%; }
+            padding: 0;
+            height: 100%; }
+            .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .video-container {
+              height: 80%; }
+              .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .video-container .video {
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+                height: 100%;
+                overflow: hidden; }
+                .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .video-container .video video {
+                  width: 100%; }
             .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .endcall-button-container {
               display: flex;
               justify-content: center;
-              margin-top: 2.5rem; }
+              height: 20%;
+              align-items: center; }
               .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .endcall-button-container .endcall-button button {
                 border-radius: 100%;
                 padding: 1.5rem;
@@ -505,9 +510,34 @@ nav.nav-header {
       .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body {
         overflow: auto; }
         .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container {
-          height: 100%;
-          border-bottom: 1px solid #ccc;
-          overflow: hidden; }
+          height: 100%; }
+          .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container .messages .message-item {
+            display: flex;
+            position: relative; }
+            .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container .messages .message-item .message-avatar {
+              width: 50px;
+              position: absolute;
+              bottom: -2rem; }
+              .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container .messages .message-item .message-avatar img {
+                width: 100%; }
+            .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container .messages .message-item .message-container {
+              padding: 0.5rem;
+              padding-left: 1rem;
+              border-radius: 10px;
+              display: flex;
+              align-items: center;
+              margin-left: calc(50px + 1rem);
+              background-color: #03CBB6;
+              border-bottom-left-radius: 0;
+              justify-content: left;
+              width: 100%; }
+              .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container .messages .message-item .message-container .message-content {
+                max-width: 100%; }
+                .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container .messages .message-item .message-container .message-content .username p {
+                  margin-bottom: 0; }
+                .live-chat-container .live-chat-content .chat-container .chat-content .card .card-body .messages-container .messages .message-item .message-container .message-content .message-text p {
+                  margin-bottom: 0;
+                  color: #fff; }
       .live-chat-container .live-chat-content .chat-container .chat-content .card .card-footer {
         padding-left: 10px;
         padding-right: 10px; }
