@@ -83,7 +83,7 @@ const Profile = () => {
                 setLasttName(response.data.last_name);
                 setNative_l(response.data.native_l);
                 setNew_l(response.data.new_l);
-                setPoints(response.data.points);
+                setPoints(response.data.points.toFixed(1));
                 setGoal1(response.data.goals[0]);
                 setGoal2(response.data.goals[1]);
                 setGoal3(response.data.goals[2]);
@@ -152,7 +152,7 @@ const Profile = () => {
 
     return (
         <>
-        <Header></Header>
+        <Header currentSelection={3}></Header>
         <Content>
             { !edit_mode && 
                 <section className="user-page-container" style={{backgroundColor: '#fff'}}>
@@ -182,7 +182,7 @@ const Profile = () => {
                                     </li>
                                     <li className="list-group-item d-flex justify-content-between align-items-center p-3">
                                     <FontAwesomeIcon icon={faEarthAmerica} />
-                                    <p className="mb-0">{birth_country}</p>
+                                    <p className="mb-0" style={{textTransform:"capitalize"}}>{birth_country}</p>
                                     </li>
                                     <li className="list-group-item d-flex justify-content-between align-items-center p-3">
                                     <FontAwesomeIcon icon={faBriefcase} />
@@ -398,8 +398,8 @@ const Profile = () => {
                                             label: 'Italy',
                                         },
                                         {
-                                            value: 'german',
-                                            label: 'German',
+                                            value: 'spain',
+                                            label: 'Spain',
                                         },
                                         {
                                             value: 'sweden',
@@ -508,8 +508,8 @@ const Profile = () => {
                                                     label: 'Italian',
                                                 },
                                                 {
-                                                    value: 'Spanish',
-                                                    label: 'spanish',
+                                                    value: 'spanish',
+                                                    label: 'Spanish',
                                                 },
                                                 {
                                                     value: 'swedish',
@@ -525,7 +525,7 @@ const Profile = () => {
                                     <p className="mb-0">Points</p>
                                     </div>
                                     <div className="col-sm-9">
-                                    <p className="text-muted mb-0">100</p>
+                                    <p className="text-muted mb-0">{points}</p>
                                     </div>
                                 </div>
                                 </div>

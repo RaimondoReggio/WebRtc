@@ -5,7 +5,7 @@ const LogoutButton = () => {
     const {logout} = useAuth0();
 
     return (
-        <button variant="btn contained" onClick={() => {
+        <button className="btn logout-button" onClick={() => {
 
             localStorage.clear();
             logout({

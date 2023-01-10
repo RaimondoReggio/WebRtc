@@ -57,7 +57,7 @@ function Connect(){
 
     return (
         <>
-        <Header></Header>
+        <Header currentSelection={1}></Header>
         <Content>
 
         { users &&

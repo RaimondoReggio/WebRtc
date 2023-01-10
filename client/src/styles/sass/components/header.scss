@@ -36,18 +36,10 @@ nav.nav-header {
             }
         }
     }
-
-    .user-drop-down {
-        font-size: 25px;
-    }
-}
-.ant-dropdown-menu {
-    .ant-dropdown-menu-item {
-        .ant-dropdown-menu-title-content {
-            button {
-                border: 0;
-                background-color: transparent;
-            }
-        }
+    .logout-button{
+        background-color: $green;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: bold;
     }
 }

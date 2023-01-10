@@ -78,12 +78,11 @@ nav.nav-header {
       color: #03CBB6; }
     nav.nav-header .navbar-nav .nav-item svg {
       margin-right: 0.5rem; }
-  nav.nav-header .user-drop-down {
-    font-size: 25px; }
-
-.ant-dropdown-menu .ant-dropdown-menu-item .ant-dropdown-menu-title-content button {
-  border: 0;
-  background-color: transparent; }
+  nav.nav-header .logout-button {
+    background-color: #03CBB6;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold; }
 
 .content {
   height: calc(100vh - 80px);
@@ -457,6 +456,16 @@ nav.nav-header {
       #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card:hover {
         box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
         border: 2px solid #dae8ff; }
+        #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card:hover .flag-image img {
+          transform: translate(0px, -10px); }
+      #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .flag-image {
+        width: 30px;
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem; }
+        #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .flag-image img {
+          width: 100%;
+          transition: transform 300ms ease-out; }
       #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .avatar {
         width: 120px; }
         #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .avatar img {

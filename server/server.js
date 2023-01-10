@@ -32,7 +32,7 @@ app.use(
 const server = http.createServer(credentials, app);
 
 server.listen(port ,()=>{
-    console.log(`Server connected successfully on Port  ${port}.`);
+    console.trace(`Server connected successfully on Port  ${port}.`);
 });
 
 const io = socket(server,{
@@ -42,7 +42,7 @@ const io = socket(server,{
     }}
 );
 
-const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages, getPossibleUsers, addContact, updateUserProfile,getUsersInfo} = require('./modules/dbinterface');
+const {checkIfUserExist, createUser, createMessage, getUserData, getContacts, getAllMessages, getPossibleUsers, addContact, updateUserProfile,getUsersInfo,reduceUserPoints, addUserPoints} = require('./modules/dbinterface');
 const {jwtCheck} = require('./modules/jwt');
 const { Console } = require('console');
 
@@ -147,9 +147,11 @@ app.post('/updateUserProfile', async(req, res) => {
 app.get('/getStrangerData', async(req, res) => {
 
     const stranger_id = req.query.user_id;
-
+    //levare contatti e _id con projection 
+    /*const options = {
+        projection: { user_id: 1, points: 1 }
+    }*/
     const result = await getUserData(stranger_id);
-
     if(result) {
         res.json(result);
     } else {
@@ -187,7 +189,7 @@ app.post('/getAllMsgs', async(req, res) => {
 
     const user_id = req.auth.sub; 
     const {to} = req.query; 
-    console.log(to);
+    console.trace(to);
     const result = await getAllMessages(user_id, to);
 
     if(result) {
@@ -200,12 +202,16 @@ app.post('/getAllMsgs', async(req, res) => {
 
 app.post('/addMsg', async(req, res) => {
 
+    //controllare che to!=user_id
     const user_id = req.auth.sub; 
     const {to, message} = req.query;
+    
+    
 
     const result = await createMessage(message, user_id, to);
+    const result_ = await addUserPoints(to, 0.2);
 
-    if(result) {
+    if(result && result_) {
         res.send("Message created");
     } else {
         res.send("Unable to create messages");
@@ -238,7 +244,15 @@ app.get('/getPossibleLives', async(req, res) => {
     }, {});
 
     if(filtered){
+
         var result = await getUsersInfo(Object.keys(filtered));
+
+        result.forEach(item => {
+            item.roomName = broadcasters[item.id].roomName;
+            item.roomDescr = broadcasters[item.id].roomDescr;
+        });
+        console.trace(result);
+
         if(result) {
             res.json(result);
         } else {
@@ -263,7 +277,7 @@ const socketJWTCheck = socketioJwt.authorize({
 
 
 io.use(socketJWTCheck, (req,res) => {
-    console.log('prova');
+    console.trace('prova');
 });
 
 
@@ -271,6 +285,7 @@ io.use(socketJWTCheck, (req,res) => {
 let onlineUsers = new Map(); // Chat
 let broadcasters = {}; // Live
 let liveUsers = {}; // Live
+let countLiveUsers = {}; //per incrementare punti
 
 io.on("connection",(socket)=>{
 
@@ -285,52 +300,64 @@ io.on("connection",(socket)=>{
     if(socket.handshake.query.type==="live"){
 
 
-        socket.on("register as broadcaster", function (room, native_l) {
-            //console.log("reg as broad: " + room +", real: " + socket.realUserId);
+        socket.on("register as broadcaster", function (room, native_l, roomName, roomDescr) {
+            //console.trace("reg as broad: " + room +", real: " + socket.realUserId);
             //room è auth0 id mandato dal client
             //se gli id corrispondono e non esiste già una stanza creata dall'utente
             if(room===socket.realUserId && !broadcasters[room]){
-                console.log("register as broadcaster for room " + room + ", native_l " + native_l);
-                broadcasters[room] = {socketId: socket.id, native_l: native_l};
+                console.trace("register as broadcaster for room " + room + ", native_l " + native_l);
+                broadcasters[room] = {socketId: socket.id,
+                             native_l: native_l, roomName: roomName, roomDescr:roomDescr};
                 socket.isBroadcaster = true;
                 socket.room = room;
 
                 socket.join(room); 
+                countLiveUsers[room] = 0;
             }
-
-            
           });
         
           //il client si registra come viewer
-          socket.on("register as viewer", function (user) {
-            console.log(broadcasters[user.room]);
-            if(broadcasters[user.room]) //se l'utente prova ad entrare in una stanza essa deve esistere
-            {
-                socket.isViewer = true;
-                console.log("register as viewer for room", user.room);
+          socket.on("register as viewer", async function (user) {
+            console.trace(broadcasters[user.room]);
+            if(user.userId === socket.realUserId){
+                if(broadcasters[user.room]) //se l'utente prova ad entrare in una stanza essa deve esistere
+                {
+                    //se il client non ha abbastanza soldi
+                    const canJoin = await reduceUserPoints(socket.realUserId);
+                    if(!canJoin){
+                        socket.emit("not enough points", user.room);
+                        console.trace("nun ten sord " + socket.realUserId);
+                    }else{
+                        
+                        socket.isViewer = true;
+                        console.trace("register as viewer for room", user.room);
+                
+                        socket.join(user.room);
+                        user.id = socket.id; //id socket
+                        socket.room = user.room;
         
-                socket.join(user.room);
-                user.id = socket.id;
-                socket.room = user.room;
-
-                if(liveUsers[user.room]) {
-                    socket.emit("old users", liveUsers[user.room]); // Send list of users in the same room to the socket's user
+                        if(liveUsers[user.room]) {
+                            socket.emit("old users", liveUsers[user.room]); // Send list of users in the same room to the socket's user
+                        }
+        
+                        if(!liveUsers[user.room]) {
+                            liveUsers[user.room] = [];
+                        }
+                        //user.id = socket.id, user.userId = id auth0
+                        liveUsers[user.room].push(user); // Stores all users in a room
+                        console.trace(broadcasters[user.room]);
+        
+                        //si manda al broadcaster la socketId del nuovo viewer
+                        socket.to(broadcasters[user.room].socketId).emit("new viewer", user); // Used to establish connection beetween viewer and broadcaster
+                        //si manda agli altri utenti nella stanza
+                        socket.to(user.room).emit("add new viewer", user); // Send the new user to everyone except socket's user
+                    }
+                }else{
+                    //stanza non esiste
+                    socket.emit("room not exist", user.room);   
                 }
-
-                if(!liveUsers[user.room]) {
-                    liveUsers[user.room] = [];
-                }
-
-                liveUsers[user.room].push(user); // Stores all users in a room
-                console.log(broadcasters[user.room]);
-
-                //si manda al broadcaster la socketId del nuovo viewer
-                socket.to(broadcasters[user.room].socketId).emit("new viewer", user); // Used to establish connection beetween viewer and broadcaster
-                //si manda agli altri utenti nella stanza
-                socket.to(user.room).emit("add new viewer", user); // Send the new user to everyone except socket's user
             }else{
-                //stanza non esiste
-                socket.emit("room not exist", user.room);
+                console.trace("utente malevolo " + user.userId + ", real " + socket.realUserId);
             }
             
           });
@@ -341,7 +368,13 @@ io.on("connection",(socket)=>{
         
           //broadcaster client invia offer a viewer
           //scatta nel socket broadcaster e lo gira al client viewer
+          //id = socket.id del client
           socket.on("offer", function (id, event) {
+            //if(event.broadcaster.room = socket.room)
+
+            //controllare se id socket sta in liveUsers nella stanza event.broadcaster.room
+            //oppure socket.room
+
             event.broadcaster.id = socket.id;
             socket.to(id).emit("offer", event.broadcaster, event.sdp);
           });
@@ -349,32 +382,45 @@ io.on("connection",(socket)=>{
           //viewer client invia answer al broadcaster
           //scatta nel socket viewer e lo gira al client broadcaster
           socket.on("answer", function (event) {
-            //console.log(event.room); da undifined
-            console.log(broadcasters[event.room]);
-            socket.to(broadcasters[event.room].socketId).emit("answer", socket.id, event.sdp);
+            if(socket.isViewer){
+                //incrementa counter stanza
+                countLiveUsers[socket.room] = countLiveUsers[socket.room] + 1;
+
+                //console.trace(event.room); da undifined
+                console.trace(broadcasters[event.room]);
+                socket.to(broadcasters[event.room].socketId).emit("answer", socket.id, event.sdp);
+            }
           });
         
           //viewer client invia msg nella stanza
           socket.on("liveMsg", function (event) {
-            //console.log("liveMsg: " +  event);
-            //console.log("liveMsg2" + socket.room);
+            //console.trace("liveMsg: " +  event);
+            //console.trace("liveMsg2" + socket.room);
             //event.room
             socket.to(socket.room).emit("liveMsg", event.msg, event.user, event.avatar);
           });
 
-          socket.on("disconnect", function() {
+          socket.on("disconnect", async function() {
             
 
             if(socket.isBroadcaster) {
-                console.log('broad-disc');
+                console.trace('broad-disc');
                 socket.to(socket.room).emit("broadcaster disconnected");
                 delete broadcasters[socket.room];
+                delete liveUsers[socket.room]; //ATTENTO
+                
+                const to_inc = countLiveUsers[socket.room];
+                const result = await addUserPoints(socket.realUserId, to_inc);
+                console.trace(result);
+
+
             } else if(socket.isViewer){
-                console.log('user-disc')
-                socket.to(socket.room).emit("remove viewer", liveUsers[socket.room]);
+                socket.isViewer = false;
+                console.trace('user-disc')
                 if(!socket.isBroadcaster && liveUsers[socket.room]) {
                     liveUsers[socket.room] = liveUsers[socket.room].filter(item => item.id != socket.id);
                 }
+                socket.to(socket.room).emit("remove viewer", liveUsers[socket.room]);
             }
 
             socket.leave(socket.room);
@@ -386,8 +432,9 @@ io.on("connection",(socket)=>{
     }else if(socket.handshake.query.type==="chat"){ // if(socket.handshake.query.myParam==="chat")
         
         socket.on("add-user",(userId)=>{
+           // console.trace("PREadduser "+ userId + "," + socket.realUserId +", " + socket.id);
             if(userId===socket.realUserId){
-                console.log("adduser "+ userId + "," + socket.realUserId +", " + socket.id);
+                console.trace("adduser "+ userId + "," + socket.realUserId +", " + socket.id);
                 onlineUsers.set(userId,socket.id);
                 socket.userId = userId;
             }
@@ -395,10 +442,11 @@ io.on("connection",(socket)=>{
         });
     
         socket.on("send-msg",(data)=>{
+            console.trace("PREsend-msg "+ data.from + "," + socket.realUserId);
             if(data.from===socket.realUserId){
-                console.log(data);
-                console.log(onlineUsers);
-                console.log("send-msg "+ data.from + "," + socket.realUserId);
+                console.trace(data);
+                console.trace(onlineUsers);
+                console.trace("send-msg "+ data.from + "," + socket.realUserId);
                 const sendUserSocket = onlineUsers.get(data.to);
                 if(sendUserSocket){
                     socket.to(sendUserSocket).emit("msg-receive",data);
@@ -411,7 +459,7 @@ io.on("connection",(socket)=>{
         socket.on("disconnect", function() {
 
             onlineUsers.delete(socket.userId);
-            console.log(onlineUsers);
+            console.trace(onlineUsers);
 
           });
     }

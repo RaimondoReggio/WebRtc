@@ -117,7 +117,7 @@ function Chat() {
     return (
         <>
 
-        <Header></Header>
+        <Header currentSelection={2}></Header>
         <Content>
             {contextHolder}
             <div className="chat-container">

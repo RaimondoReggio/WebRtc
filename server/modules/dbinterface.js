@@ -53,7 +53,7 @@ const createUser = async (user_id, first_name, last_name, username, native_l, ne
     }
 
     try {
-        const result = insertOneDocument(coll, document);
+        const result = await insertOneDocument(coll, document);
 
         if(result) {
             return true;
@@ -93,7 +93,7 @@ const updateUserProfile = async (user_id, first_name, last_name, username, nativ
     };
 
     try {
-        const result = updateOneDocument(coll, filter, document);
+        const result = await updateOneDocument(coll, filter, document);
 
         if(result) {
             return true;
@@ -145,6 +145,8 @@ const getUsersInfo = async(users_id) =>{
                     username: item.username,
                     avatar_image: item.avatar_image,
                     id: item.user_id,
+                    native_l: item.native_l,
+
                 }
                 users.push(struct)
             });
@@ -294,7 +296,7 @@ const createMessage = async (message, from_id, to_id) => {
     }
 
     try {
-        const result = insertOneDocument(coll, document);
+        const result = await insertOneDocument(coll, document);
 
         if(result) {
             return true;
@@ -342,6 +344,65 @@ const getAllMessages = async (from_id, to_id) => {
 
 }
 
+const reduceUserPoints = async (user_id) => {
+    const coll = "users";
+    const options = {
+        projection: { user_id: 1, points: 1 }
+    }
+    const query = {
+        user_id: user_id,
+    };
+    try {
+        const result = await findOneDocument(coll, query, options);
+        console.log("reduceUserPoints " + user_id +", "+ result.points);
+        console.log("reduceUserPoints " + result);
+        if(result.points >=9.9 ) { //s po fa
+            const document = {
+                $inc: {
+                    points: -10,
+                },
+            }
+            const result_ = await updateOneDocument(coll, query, document);
+            console.log("reduceUserPoints2 " + result_);
+            if(result_) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+const addUserPoints = async (user_id, to_inc) => {
+    const coll = "users";
+    const query = {
+        user_id: user_id,
+    };
+    try {
+        const document = {
+            $inc: {
+                points: to_inc,
+            },
+        }
+        const result = await updateOneDocument(coll, query, document);
+        console.log("addUserPoint " + result);
+        if(result) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+
 module.exports = {
     checkIfUserExist,
     createUser,
@@ -353,4 +414,6 @@ module.exports = {
     addContact,
     updateUserProfile,
     getUsersInfo,
+    reduceUserPoints,
+    addUserPoints,
 }
