@@ -6,7 +6,7 @@ import Header from "../general/header";
 import { useNavigate } from 'react-router-dom'
 import Content from "../general/content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhoneSlash, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { faPhoneSlash, faPaperPlane, faCamera } from "@fortawesome/free-solid-svg-icons";
 
 
 function Live(){
@@ -45,6 +45,7 @@ function Live(){
   // Check if user is a broadcaster
   const [is_broadcaster, setIsBroadcaster] = useState(false);
 
+  const [errorRoom, setErrorRoom] = useState();
   //client
   //const [rtcPeerConnections, setRtcPeerConnections] = useState({});
   let rtcPeerConnections = {};
@@ -158,7 +159,8 @@ function Live(){
           
           
       // message handlers, funzione del brodcaster
-      //BROADCASTER INVIA OFFER
+      //inviato da viewer e ricevuto da broadcaster
+      //ora broadcaster invia una offer al viewer 
       socket.current.on("new viewer", function (viewer) {
         console.log(viewer);
         
@@ -203,18 +205,19 @@ function Live(){
           
       });
 
+      //ricevuto sia da broadcaster che dagli utenti nella stanza
       socket.current.on('add new viewer', function(viewer) {
         setLiveUsers(live_users => [...live_users, viewer]);  
       }); 
-
+      //ricevuto dagli utenti entrati dopo
       socket.current.on('old users', function(viewers) {
         setLiveUsers(viewers);
       });
-
+      //ricevuto sia da broadcaster che dagli utenti nella stanza
       socket.current.on('remove viewer', function(viewers) {
         setLiveUsers(viewers);
       });
-
+      //ricevuto dai viewer
       socket.current.on('broadcaster disconnected', function() {
         console.log('broad-disc');
         navigate(0);
@@ -230,7 +233,7 @@ function Live(){
         
       });
           
-      //VIEWER RICEVER OFFER ED INVIA ANSWER
+      //viewer riceve offer dal broadcaster ed invia answer
       socket.current.on("offer", function (broadcaster, sdp) {
         // broadcasterName.innerText = broadcaster.name + "is broadcasting...";
         
@@ -258,6 +261,7 @@ function Live(){
         rtcPeerConnections[broadcaster.id].ontrack = (event) => {
             const videoElement = document.querySelector("video");
           videoElement.srcObject = event.streams[0];
+          videoElement.style.transform       = "scaleX(" + "-1" + ")";
         };
         
         rtcPeerConnections[broadcaster.id].onicecandidate = (event) => {
@@ -273,7 +277,9 @@ function Live(){
         };
 
       });
-          
+
+
+      //ricevuto da broadcaster in seguito ad una offer inviata al viewer    
       socket.current.on("answer", function (viewerId, event) {
 
         rtcPeerConnections[viewerId].setRemoteDescription(
@@ -281,6 +287,12 @@ function Live(){
         );
         
       });
+
+      //ricevuto dal viewer nel caso prova ad entrare in una stanza che non esiste
+      socket.current.on("room not exist", function (room) {
+          setErrorRoom(false);
+      });
+
     };
 
     if(currentUser) {
@@ -291,6 +303,11 @@ function Live(){
     }
   }, [currentUser]);
   
+  const mute = () => {
+    const videoElement = document.querySelector("video");
+    videoElement.srcObject.getTracks().forEach(t => t.enabled = !t.enabled);
+  }
+
 
   const handleClickBroadcaster = () => {
     // if (roomNumb.current == undefined || !currentUser.username) {
@@ -437,6 +454,9 @@ function Live(){
                           <div className="endcall-button">
                             <button className="btn" onClick={() => {navigate(0)}}>
                               <FontAwesomeIcon icon={faPhoneSlash}></FontAwesomeIcon>
+                            </button>
+                            <button className="btn" onClick={() => {mute()}}>
+                              <FontAwesomeIcon icon={faCamera}></FontAwesomeIcon>
                             </button>
                           </div>
                         </div>

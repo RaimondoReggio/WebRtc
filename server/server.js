@@ -288,7 +288,8 @@ io.on("connection",(socket)=>{
         socket.on("register as broadcaster", function (room, native_l) {
             //console.log("reg as broad: " + room +", real: " + socket.realUserId);
             //room è auth0 id mandato dal client
-            if(room===socket.realUserId){
+            //se gli id corrispondono e non esiste già una stanza creata dall'utente
+            if(room===socket.realUserId && !broadcasters[room]){
                 console.log("register as broadcaster for room " + room + ", native_l " + native_l);
                 broadcasters[room] = {socketId: socket.id, native_l: native_l};
                 socket.isBroadcaster = true;
@@ -300,31 +301,45 @@ io.on("connection",(socket)=>{
             
           });
         
+          //il client si registra come viewer
           socket.on("register as viewer", function (user) {
-            console.log("register as viewer for room", user.room);
-        
-            socket.join(user.room);
-            user.id = socket.id;
-            socket.room = user.room;
-
-            if(liveUsers[user.room]) {
-                socket.emit("old users", liveUsers[user.room]); // Send list of users in the same room to the socket's user
-            }
-
-            if(!liveUsers[user.room]) {
-                liveUsers[user.room] = [];
-            }
-
-            liveUsers[user.room].push(user); // Stores all users in a room
             console.log(broadcasters[user.room]);
-            socket.to(broadcasters[user.room].socketId).emit("new viewer", user); // Used to establish connection beetween viewer and broadcaster
-            socket.to(user.room).emit("add new viewer", user); // Send the new user to everyone except socket's user
+            if(broadcasters[user.room]) //se l'utente prova ad entrare in una stanza essa deve esistere
+            {
+                socket.isViewer = true;
+                console.log("register as viewer for room", user.room);
+        
+                socket.join(user.room);
+                user.id = socket.id;
+                socket.room = user.room;
+
+                if(liveUsers[user.room]) {
+                    socket.emit("old users", liveUsers[user.room]); // Send list of users in the same room to the socket's user
+                }
+
+                if(!liveUsers[user.room]) {
+                    liveUsers[user.room] = [];
+                }
+
+                liveUsers[user.room].push(user); // Stores all users in a room
+                console.log(broadcasters[user.room]);
+
+                //si manda al broadcaster la socketId del nuovo viewer
+                socket.to(broadcasters[user.room].socketId).emit("new viewer", user); // Used to establish connection beetween viewer and broadcaster
+                //si manda agli altri utenti nella stanza
+                socket.to(user.room).emit("add new viewer", user); // Send the new user to everyone except socket's user
+            }else{
+                //stanza non esiste
+                socket.emit("room not exist", user.room);
+            }
+            
           });
         
           socket.on("candidate", function (id, event) {
             socket.to(id).emit("candidate", socket.id, event);
           });
         
+          //scatta nel brodcaster
           socket.on("offer", function (id, event) {
             event.broadcaster.id = socket.id;
             socket.to(id).emit("offer", event.broadcaster, event.sdp);
@@ -344,17 +359,18 @@ io.on("connection",(socket)=>{
           });
 
           socket.on("disconnect", function() {
-            if(!socket.isBroadcaster && liveUsers[socket.room]) {
-                liveUsers[socket.room] = liveUsers[socket.room].filter(item => item.id != socket.id);
-            }
+            
 
             if(socket.isBroadcaster) {
                 console.log('broad-disc');
                 socket.to(socket.room).emit("broadcaster disconnected");
                 delete broadcasters[socket.room];
-            } else {
+            } else if(socket.isViewer){
                 console.log('user-disc')
                 socket.to(socket.room).emit("remove viewer", liveUsers[socket.room]);
+                if(!socket.isBroadcaster && liveUsers[socket.room]) {
+                    liveUsers[socket.room] = liveUsers[socket.room].filter(item => item.id != socket.id);
+                }
             }
 
             socket.leave(socket.room);
