@@ -12,6 +12,8 @@ import Chat from './routes/Chat';
 import Connect from './routes/Connect';
 import StrangerPage from './routes/StrangerPage';
 import Live from './routes/Live';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function App() {
 

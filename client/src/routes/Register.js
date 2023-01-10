@@ -6,9 +6,16 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Axios from 'axios';
-import avatar1 from '../assets/avatar/avatar1.png';
-import avatar2 from '../assets/avatar/avatar2.png';
-import avatar3 from '../assets/avatar/avatar3.png';
+import avatar1 from '../assets/avatar/user1.svg';
+import avatar2 from '../assets/avatar/user2.svg';
+import avatar3 from '../assets/avatar/user3.svg';
+import avatar4 from '../assets/avatar/user4.svg';
+import avatar5 from '../assets/avatar/user5.svg';
+import avatar6 from '../assets/avatar/user6.svg';
+import avatar7 from '../assets/avatar/user7.svg';
+import avatar8 from '../assets/avatar/user8.svg';
+import avatar9 from '../assets/avatar/user9.svg';
+import SlickSlider from '../general/carousel';
 
 let goal_index = 0;
 let hobbie_index = 0;
@@ -23,6 +30,10 @@ function Register() {
 
     // Steps description
     const description = 'This is a description.';
+
+    const [slider_index, setSliderIndex] = useState();
+
+    const avatar_array = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9];
 
     // User variables
     const [first_name, setFirstName] = useState('');
@@ -131,6 +142,7 @@ function Register() {
                 error();
             }
         }  else if(step === 1) {
+            setAvatarImage(avatar_array[slider_index]);
             setStep(2);
         }
     }
@@ -181,8 +193,8 @@ function Register() {
                                 <div className='card-header'>
                                     <h2>Setting your { step === 0 && 'data'} {step === 1 && 'avatar'} {step === 2 && 'preference'}</h2>
                                 </div>
-                                <div className='card-body'>
-                                    <div className='card-body-content'>
+                                <div className='card-body' style={{alignItems: step === 1 && 'center'}}>
+                                    <div className='card-body-content' style={{width: step === 1 && '60%'}}>
                                     { step === 0 &&
                                         <>
                                         <div className="row mb-4">
@@ -348,34 +360,37 @@ function Register() {
                                     }
                                     {step === 1 && 
                                     <>
-                                    <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
-                                        <Avatar className='user-avatar' size={150}  src={avatar_image}/>
-                                    </div>
-                                    <div className='text mb-4 d-flex justify-content-center'>
-                                        <p>Choiche your avatar</p>
-                                    </div>
-                                    <div className='user-avatar-choiches'>
-                                        <div className='row'>
-                                            <div className='col-md-3 d-flex justify-content-center'>
-                                                <button className="user-avatar-choiche-button" onClick={(e) => changeAvatar(e)}>
-                                                    <Avatar className='user-avatar-choiche' size={70} src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"/>
-                                                </button>
-                                            </div>
-                                            <div className='col-md-3 d-flex justify-content-center'>
-                                                <button className="user-avatar-choiche-button" onClick={(e) => changeAvatar(e)}>
-                                                    <Avatar className='user-avatar-choiche' size={70} src={avatar1}/>
-                                                </button>
-                                            </div>
-                                            <div className='col-md-3 d-flex justify-content-center'>
-                                                <button className="user-avatar-choiche-button" onClick={(e) => changeAvatar(e)}>
-                                                    <Avatar className='user-avatar-choiche' size={70} src={avatar2}/>
-                                                </button>
-                                            </div>
-                                            <div className='col-md-3 d-flex justify-content-center'>
-                                                <button className="user-avatar-choiche-button" onClick={(e) => changeAvatar(e)}>
-                                                    <Avatar className='user-avatar-choiche' size={70} src={avatar3}/>
-                                                </button>
-                                            </div>
+                                    <div className='slider-container'>
+                                        <div className='slider-content'>
+                                            <SlickSlider setActiveSlide={setSliderIndex} dots={false} nav={true}>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar1}/>
+                                                </div>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar2}/>
+                                                </div>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar3}/>
+                                                </div>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar4}/>
+                                                </div>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar5}/>
+                                                </div>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar6}/>
+                                                </div>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar7}/>
+                                                </div>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar8}/>
+                                                </div>
+                                                <div className='user-avatar-container mb-5 mt-4 d-flex justify-content-center'>
+                                                    <Avatar className='user-avatar' size={150}  src={avatar9}/>
+                                                </div>
+                                            </SlickSlider>
                                         </div>
                                     </div>
                                     </>

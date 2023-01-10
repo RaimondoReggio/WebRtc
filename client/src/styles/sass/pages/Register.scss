@@ -77,11 +77,16 @@
 							}
 						}
 					}
-					.user-avatar-choiche-button {
-						border: 0;
-						background-color: transparent;
-						.ant-avatar {
-							border: 1px solid #000;
+					.slider-container {
+						.slider-content {
+							.user-avatar {
+								.ant-avatar {
+
+								}
+							}
+							svg {
+								color: #000;
+							}
 						}
 					}
 				}

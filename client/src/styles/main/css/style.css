@@ -297,11 +297,8 @@ nav.nav-header {
               color: #fff; }
               #register-page .register-content .card .card-body .card-body-content .button-save-container button:hover {
                 border-color: #03CBB6; }
-          #register-page .register-content .card .card-body .card-body-content .user-avatar-choiche-button {
-            border: 0;
-            background-color: transparent; }
-            #register-page .register-content .card .card-body .card-body-content .user-avatar-choiche-button .ant-avatar {
-              border: 1px solid #000; }
+          #register-page .register-content .card .card-body .card-body-content .slider-container .slider-content svg {
+            color: #000; }
     #register-page .register-content .step-container {
       background-color: #03CBB6;
       height: 100%;
@@ -425,6 +422,66 @@ nav.nav-header {
           font-size: 12px;
           text-align: justify; }
 
+#selectRoom .button-open-create-room-modal-container {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem; }
+  #selectRoom .button-open-create-room-modal-container .button-open-create-room-modal {
+    border-radius: 100%;
+    padding: 0.5rem;
+    font-size: 30px;
+    font-weight: bold;
+    background-color: #03CBB6;
+    color: #fff;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+    #selectRoom .button-open-create-room-modal-container .button-open-create-room-modal svg {
+      transition: transform 600ms ease-out; }
+    #selectRoom .button-open-create-room-modal-container .button-open-create-room-modal:hover svg {
+      transform: rotate(360deg); }
+
+#selectRoom .possible-lives-container .possible-lives-content {
+  width: 90%;
+  height: 80%;
+  overflow: auto; }
+  #selectRoom .possible-lives-container .possible-lives-content .rooms {
+    width: 100%; }
+    #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card {
+      margin-bottom: 2rem;
+      height: 230px;
+      box-shadow: none;
+      background-color: #dae8ff21; }
+      #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card:hover {
+        box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 10px 20px -2px rgba(0, 0, 0, 0.04);
+        border: 2px solid #dae8ff; }
+      #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .avatar {
+        width: 120px; }
+        #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .avatar img {
+          width: 100%; }
+      #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .info-content {
+        width: 100%; }
+        #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .info-content .room-name h4 {
+          text-align: left;
+          text-transform: capitalize; }
+        #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .info-content .room-l p {
+          font-size: 15px;
+          font-weight: bold;
+          margin-bottom: 0;
+          text-transform: capitalize; }
+        #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .info-content .room-description p {
+          font-size: 12px;
+          text-align: justify; }
+      #selectRoom .possible-lives-container .possible-lives-content .rooms .room-card .card-body .room .button-join-live-container .button-join-live {
+        width: 70%;
+        color: #fff;
+        background-color: #03CBB6;
+        border: 0;
+        text-transform: uppercase;
+        font-weight: bold; }
+
 .live-chat-container {
   height: 100vh; }
   .live-chat-container .live-chat-content {
@@ -489,12 +546,23 @@ nav.nav-header {
                 overflow: hidden; }
                 .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .video-container .video video {
                   width: 100%; }
-            .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .endcall-button-container {
+            .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .control-button-container {
               display: flex;
               justify-content: center;
               height: 20%;
               align-items: center; }
-              .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .endcall-button-container .endcall-button button {
+              .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .control-button-container .endcall-button {
+                margin-right: 2rem; }
+                .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .control-button-container .endcall-button button {
+                  border-radius: 100%;
+                  padding: 1.5rem;
+                  font-size: 20px;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  color: #fff;
+                  background-color: #03CBB6; }
+              .live-chat-container .live-chat-content .main-section-container .main-section-content .card .card-body .control-button-container .cameraoff-button button {
                 border-radius: 100%;
                 padding: 1.5rem;
                 font-size: 20px;
@@ -558,3 +626,16 @@ nav.nav-header {
             display: flex;
             justify-content: center;
             align-items: center; }
+
+.modal-create-room .button-create-room-container {
+  display: flex;
+  justify-content: flex-end; }
+  .modal-create-room .button-create-room-container .create-room-button {
+    color: #fff;
+    background-color: #03CBB6;
+    border: 0;
+    text-transform: uppercase;
+    font-weight: bold; }
+
+.modal-create-room .ant-modal-footer {
+  display: none; }
