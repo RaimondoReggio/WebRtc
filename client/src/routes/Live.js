@@ -143,6 +143,7 @@ function Live(){
           }
           );
 
+      //ricevuto sia da broadcaster che viewer
       socket.current.on("liveMsg", function (msg, user, avatar) {
 
         //const new_message = [...messages];

@@ -339,18 +339,22 @@ io.on("connection",(socket)=>{
             socket.to(id).emit("candidate", socket.id, event);
           });
         
-          //scatta nel brodcaster
+          //broadcaster client invia offer a viewer
+          //scatta nel socket broadcaster e lo gira al client viewer
           socket.on("offer", function (id, event) {
             event.broadcaster.id = socket.id;
             socket.to(id).emit("offer", event.broadcaster, event.sdp);
           });
         
+          //viewer client invia answer al broadcaster
+          //scatta nel socket viewer e lo gira al client broadcaster
           socket.on("answer", function (event) {
             //console.log(event.room); da undifined
             console.log(broadcasters[event.room]);
             socket.to(broadcasters[event.room].socketId).emit("answer", socket.id, event.sdp);
           });
         
+          //viewer client invia msg nella stanza
           socket.on("liveMsg", function (event) {
             //console.log("liveMsg: " +  event);
             //console.log("liveMsg2" + socket.room);
