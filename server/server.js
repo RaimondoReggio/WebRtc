@@ -11,11 +11,6 @@ var fs = require('fs');
 const port = 4000;
 const socket = require("socket.io");
 
-var privateKey  = fs.readFileSync('./certificate/key.pem');
-var certificate = fs.readFileSync('./certificate/certificate.pem');
-
-var credentials = {key: privateKey, cert: certificate};
-
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
