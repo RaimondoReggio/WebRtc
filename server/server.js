@@ -24,10 +24,7 @@ app.use(
     })
 );
 
-
-server.listen(port ,()=>{
-    console.trace(`Server connected successfully on Port  ${port}.`);
-});
+app.listen(port);
 
 const io = socket(server,{
     cors:{
