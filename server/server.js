@@ -24,7 +24,6 @@ app.use(
     })
 );
 
-const server = http.createServer(credentials, app);
 
 server.listen(port ,()=>{
     console.trace(`Server connected successfully on Port  ${port}.`);
