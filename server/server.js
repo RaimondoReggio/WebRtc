@@ -24,7 +24,11 @@ app.use(
     })
 );
 
-app.listen(port);
+const server = http.createServer(app);
+
+server.listen(port ,()=>{
+    console.trace(`Server connected successfully on Port  ${port}.`);
+});
 
 const io = socket(server,{
     cors:{
