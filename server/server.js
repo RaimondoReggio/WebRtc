@@ -5,7 +5,7 @@ const jwks = require('jwks-rsa');
 const jwt = require('jsonwebtoken');
 
 const express = require('express');
-const http = require('https');
+const http = require('http');
 const cors = require('cors');
 var fs = require('fs');
 const port = 4000;
@@ -25,10 +25,6 @@ app.use(
 );
 
 const server = http.createServer(app);
-
-server.listen(port ,()=>{
-    console.trace(`Server connected successfully on Port  ${port}.`);
-});
 
 const io = socket(server,{
     cors:{
@@ -461,5 +457,10 @@ io.on("connection",(socket)=>{
     //global.chatSocket = socket;
 
     
+});
+
+
+server.listen(port ,()=>{
+    console.trace(`Server connected successfully on Port  ${port}.`);
 });
  
