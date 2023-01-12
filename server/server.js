@@ -18,7 +18,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(
     cors({
-      origin: 'https://talk-to-learn.onrender.com',
+      origin: true,
       methods: ["GET", "POST"],
       credentials: true,
     })
@@ -28,7 +28,7 @@ const server = http.createServer(app);
 
 const io = socket(server,{
     cors:{
-       origin: 'https://talk-to-learn.onrender.com',
+       origin: true,
         Credential:true,     
     }}
 );
