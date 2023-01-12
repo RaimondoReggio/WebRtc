@@ -122,7 +122,14 @@ const Profile = () => {
         }).then(async(response) => {
             if(response.data.registered) {
 
-
+                const user_data = {
+                    id: user.sub,
+                    username: username,
+                    avatar_image: avatar_image,
+                    native_l: native_l,
+                    new_l: new_l,
+                }
+                localStorage.setItem('user-data', JSON.stringify(user_data));
 
                 setEditMode(false);
             } else {
