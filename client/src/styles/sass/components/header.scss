@@ -1,0 +1,45 @@
+nav.nav-header {
+    height: 80px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background-color: $white;
+    img {
+        height: 50px;
+        margin-right: 2rem;
+    }
+    .navbar-nav {
+        .nav-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-right: 1rem;
+            .nav-link {
+                button {
+                    box-shadow: none;
+                    border: 0;
+                    background-color: transparent;
+                    padding: 0;
+                }
+            }
+            &.active {
+                svg {
+                    color: $green;
+                }
+                .nav-link {
+                    button {
+                        color: $green;
+                    }
+                }
+            }
+            svg {
+                margin-right: 0.5rem;
+            }
+        }
+    }
+    .logout-button{
+        background-color: $green;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+}

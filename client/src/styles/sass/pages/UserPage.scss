@@ -1,0 +1,27 @@
+.user-page-container {
+    .user-card {
+        .btn-msg {
+            background-color: $green;
+        }
+        .btn-like {
+            border-color: $green;
+            color: $green;
+        }
+    }
+    .progress-bar {
+        background-color: $green;
+    }
+    .job-field {
+        width: 140px;
+    }
+    .card-goals, .card-hobbies {
+        height: 17.5rem;
+    }
+    .no-item-message {
+        height: 70%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $green;
+    }
+}

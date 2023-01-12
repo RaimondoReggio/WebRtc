@@ -1,0 +1,88 @@
+.connect-container {
+    .connect-content {
+        width: 90%;
+        height: 80%;
+        overflow: auto;
+        .users {
+            width: 100%;
+            .card-user {
+                margin-bottom: 2rem;
+                height: 230px;
+                box-shadow: none;
+                background-color: #dae8ff21;
+                &:hover {
+                    box-shadow: 0 2px 15px -3px rgba(0, 0, 0,  0.07%), 0 10px 20px -2px rgba(0, 0, 0, 0.04%);
+                    border: 2px solid #dae8ff;;
+                    .flag-image {
+                        img {
+                            transform: translate(0px, -10px);
+                        }
+                    }
+                }
+                .card-body {
+                    .flag-image {
+                        width: 30px;
+                        position: absolute;
+                        top: 0.5rem;
+                        right: 1rem;
+                        img {
+                            width: 100%;
+                            transition: transform 300ms ease-out;
+                        }
+                        
+                    }
+                    .avatar {
+                        width: 120px;
+                        img {
+                            width: 100%;
+                        }
+                    }
+                    .info-content {
+                        width: 100%;
+                        .username {
+                            h4 {
+                                text-align: left;
+                                text-transform: capitalize;
+                            }
+                        }
+                        .language {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: flex-start;
+                            .native_l {
+                                p {
+                                    font-size: 15px;
+                                    font-weight: bold;
+                                    margin-bottom: 0;
+                                    text-transform: capitalize;
+                                }
+                            }
+                            .arrow {
+                                .arrow-right {
+                                    margin-bottom: -10px;
+                                    color: $green;
+                                }
+                                .arrow-left {
+                                    color: $green;
+                                }
+                            }
+                            .new_l {
+                                p {
+                                    font-size: 15px;
+                                    font-weight: bold;
+                                    text-transform: capitalize;
+                                }
+                            }
+                        }
+                        .biography {
+                            p {
+                                font-size: 12px;
+                                text-align: justify;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
