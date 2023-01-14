@@ -361,19 +361,19 @@ io.on("connection",(socket)=>{
           //scatta nel socket broadcaster e lo gira al client viewer
           //id = socket.id del client
           socket.on("offer", function (id, event) {
-            //if(event.broadcaster.room = socket.room)
-
-            //controllare se id socket sta in liveUsers nella stanza event.broadcaster.room
-            //oppure socket.room
-
-            event.broadcaster.id = socket.id;
-            socket.to(id).emit("offer", event.broadcaster, event.sdp);
+            //const clientsInRoom = await io.in(roomName).allSockets()
+            //controllare se id sta nella stanza detta
+            if(event.broadcaster.room === socket.room){ //se il broadcast sta facendo un offerta per la sua stanza
+                event.broadcaster.id = socket.id;
+                socket.to(id).emit("offer", event.broadcaster, event.sdp);
+            }
+            
           });
         
           //viewer client invia answer al broadcaster
           //scatta nel socket viewer e lo gira al client broadcaster
           socket.on("answer", function (event) {
-            if(socket.isViewer){
+            if(socket.isViewer && socket.room===event.room){
                 //incrementa counter stanza
                 countLiveUsers[socket.room] = countLiveUsers[socket.room] + 1;
 
@@ -385,10 +385,13 @@ io.on("connection",(socket)=>{
         
           //viewer client invia msg nella stanza
           socket.on("liveMsg", function (event) {
-            //console.trace("liveMsg: " +  event);
-            //console.trace("liveMsg2" + socket.room);
-            //event.room
-            socket.to(socket.room).emit("liveMsg", event.msg, event.user, event.avatar);
+            if(socket.isViewer){
+                //console.trace("liveMsg: " +  event);
+                //console.trace("liveMsg2" + socket.room);
+                //event.room
+                socket.to(socket.room).emit("liveMsg", event.msg, event.user, event.avatar);
+            }
+            
           });
 
           socket.on("disconnect", async function() {
