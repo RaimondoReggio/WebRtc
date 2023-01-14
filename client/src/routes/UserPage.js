@@ -130,7 +130,6 @@ const Profile = () => {
                     new_l: new_l,
                 }
                 localStorage.setItem('user-data', JSON.stringify(user_data));
-                
                 setEditMode(false);
             } else {
                 alert(response.data.message);

@@ -5,16 +5,11 @@ const jwks = require('jwks-rsa');
 const jwt = require('jsonwebtoken');
 
 const express = require('express');
-const http = require('https');
+const http = require('http');
 const cors = require('cors');
 var fs = require('fs');
 const port = 4000;
 const socket = require("socket.io");
-
-var privateKey  = fs.readFileSync('./certificate/key.pem');
-var certificate = fs.readFileSync('./certificate/certificate.pem');
-
-var credentials = {key: privateKey, cert: certificate};
 
 const app = express();
 app.use(express.json());
@@ -23,21 +18,17 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(
     cors({
-      origin: true,
+      origin: 'https://talk-to-learn.vercel.app',
       methods: ["GET", "POST"],
       credentials: true,
     })
 );
 
-const server = http.createServer(credentials, app);
-
-server.listen(port ,()=>{
-    console.trace(`Server connected successfully on Port  ${port}.`);
-});
+const server = http.createServer(app);
 
 const io = socket(server,{
     cors:{
-       origin: true,
+       origin: 'https://talk-to-learn.vercel.app',
         Credential:true,     
     }}
 );
@@ -370,19 +361,19 @@ io.on("connection",(socket)=>{
           //scatta nel socket broadcaster e lo gira al client viewer
           //id = socket.id del client
           socket.on("offer", function (id, event) {
-            //if(event.broadcaster.room = socket.room)
-
-            //controllare se id socket sta in liveUsers nella stanza event.broadcaster.room
-            //oppure socket.room
-
-            event.broadcaster.id = socket.id;
-            socket.to(id).emit("offer", event.broadcaster, event.sdp);
+            //const clientsInRoom = await io.in(roomName).allSockets()
+            //controllare se id sta nella stanza detta
+            if(event.broadcaster.room === socket.room){ //se il broadcast sta facendo un offerta per la sua stanza
+                event.broadcaster.id = socket.id;
+                socket.to(id).emit("offer", event.broadcaster, event.sdp);
+            }
+            
           });
         
           //viewer client invia answer al broadcaster
           //scatta nel socket viewer e lo gira al client broadcaster
           socket.on("answer", function (event) {
-            if(socket.isViewer){
+            if(socket.isViewer && socket.room===event.room){
                 //incrementa counter stanza
                 countLiveUsers[socket.room] = countLiveUsers[socket.room] + 1;
 
@@ -394,10 +385,13 @@ io.on("connection",(socket)=>{
         
           //viewer client invia msg nella stanza
           socket.on("liveMsg", function (event) {
-            //console.trace("liveMsg: " +  event);
-            //console.trace("liveMsg2" + socket.room);
-            //event.room
-            socket.to(socket.room).emit("liveMsg", event.msg, event.user, event.avatar);
+            if(socket.isViewer){
+                //console.trace("liveMsg: " +  event);
+                //console.trace("liveMsg2" + socket.room);
+                //event.room
+                socket.to(socket.room).emit("liveMsg", event.msg, event.user, event.avatar);
+            }
+            
           });
 
           socket.on("disconnect", async function() {
@@ -466,5 +460,10 @@ io.on("connection",(socket)=>{
     //global.chatSocket = socket;
 
     
+});
+
+
+server.listen(port ,()=>{
+    console.trace(`Server connected successfully on Port  ${port}.`);
 });
  
