@@ -18,7 +18,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(
     cors({
-      origin: true,
+      origin: 'https://talk-to-learn.vercel.app/',
       methods: ["GET", "POST"],
       credentials: true,
     })
@@ -28,7 +28,7 @@ const server = http.createServer(app);
 
 const io = socket(server,{
     cors:{
-       origin: true,
+       origin: 'https://talk-to-learn.vercel.app/',
         Credential:true,     
     }}
 );
