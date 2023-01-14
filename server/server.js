@@ -7,7 +7,6 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-var csrf = require('csurf');
 var fs = require('fs');
 const port = 4000;
 const socket = require("socket.io");
@@ -255,14 +254,6 @@ app.get('/getPossibleLives', async(req, res) => {
     }
 });
 
-//MODIFICA 
-const csrfProtection = csrf({
-    cookie: true
-});
-app.use(csrfProtection);
-app.get('/getCSRFToken', (req, res) => {
-    res.json({ CSRFToken: req.CSRFToken() });
-});
 
 const socketJWTCheck = socketioJwt.authorize({
     secret: jwks.expressJwtSecret({

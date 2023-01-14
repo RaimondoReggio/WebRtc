@@ -63,8 +63,6 @@ const Profile = () => {
     const [edit_mode, setEditMode] = useState(false);
     const dateFormat = 'YYYY/MM/DD';
 
-    
-
     // Retrives all user data
     const getUserData = async() => {
         const token = await getAccessTokenSilently();
@@ -141,18 +139,7 @@ const Profile = () => {
     }
 
     useEffect(() => {
-        const getCSRFToken = async () => {
-            const token = await getAccessTokenSilently();
-            const response = await axios({method: 'get', url: BASE_URL + '/getCSRFToken', 
-                headers: {'Authorization': `Bearer ${token}`}
-            });
-            axios.defaults.headers.post['X-CSRF-Token'] = response.data.CSRFToken;
-            axios.defaults.headers.get['X-CSRF-Token'] = response.data.CSRFToken;
-            getUserData();
-        };
-
-        getCSRFToken();
-        
+        getUserData();
     },[]);
 
     const addItemGoal = (e) => {
