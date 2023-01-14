@@ -260,7 +260,9 @@ const csrfProtection = csrf({
     cookie: true
 });
 app.use(csrfProtection);
+
 app.get('/getCSRFToken', (req, res) => {
+    console.log("CSRF : " + req.CSRFToken());
     res.json({ CSRFToken: req.CSRFToken() });
 });
 
