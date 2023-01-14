@@ -1,6 +1,8 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
+// Sul click rimanda alla pagina di logout Auth0
+
 const LogoutButton = () => {
     const {logout} = useAuth0();
 

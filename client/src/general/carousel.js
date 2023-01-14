@@ -1,7 +1,7 @@
 import React from "react";
 import Slider from "react-slick"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleArrowLeft, faCircleArrowRight, faArrowRight, faArrowLeft, faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCaretRight, faCaretLeft } from '@fortawesome/free-solid-svg-icons';
 
 const SlickSlider = ({children, setActiveSlide, nav, dots}) => {
     var settings = {

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import Axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-
 import Header from "../general/header";
 import { useNavigate } from 'react-router-dom'
 import Content from "../general/content";
@@ -11,6 +10,9 @@ import england_flag from '../assets/flags/england.png';
 import spain_flag from '../assets/flags/spain.png';
 import italy_flag from '../assets/flags/italy.png';
 import sweden_flag from '../assets/flags/sweden.png';
+
+// Componente utilizzato per visualizzare gli utenti da conoscere
+// gli utenti compatibili sono selezionati in base alla corrispondeza di lingue
 
 function Connect(){
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
@@ -23,6 +25,7 @@ function Connect(){
     
     useEffect(() => {
 
+        // Preleva tramite API la lista di possibli nuovi contatti
         const getPossibleUsers = async() => {
             const token = await getAccessTokenSilently();
             await Axios.get(BASE_URL+'/getPossibleUsers', {
@@ -38,14 +41,16 @@ function Connect(){
         };
 
         getPossibleUsers();
+
     }, []);
 
+    // Redirect alla pagine profilo di un altro utente
     const handleClick = (id) => {
         navigate('/strangerpage', {
             state: {
               userId: id,
             }
-          });
+        });
     }
 
     const flags_array = {

@@ -1,5 +1,6 @@
 import React from "react";
 
+// Componente grafico utilizzato durante le transizioni di pagina.
 
 const Loading = () => {
     return (

@@ -3,12 +3,15 @@ import { Navigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import Axios from 'axios';
 
+// Utilizzata per verificare se l'utente ha eseguito il login(Auth0) e 
+// terminato la procedura di registrazione dei dati profilo(Mongo).
+
 const ProtectedRoutesUser = ({children}) => {
     const { isAuthenticated } = useAuth0();
     const {getAccessTokenSilently} = useAuth0();
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
-    // Check if user is already registered
+    // Controlla se l'utente è presente nel db(Mongo).
     const checkIfUserExist = async() => {
         const token = await getAccessTokenSilently();
 

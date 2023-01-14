@@ -4,17 +4,23 @@ import ChatInput from "./chat-input";
 import axios from "axios";
 import {v4 as uuidv4} from 'uuid';
 
+// Componente utilizzato renderizzare la chat con l'utente selezionato.
+
 const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notifications}) => {
 
     const {getAccessTokenSilently} = useAuth0();
 
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
+    // Variabile di stato per la gestione dei messaggi
     const [messages,setMessages] = useState([]);
+
+    // Variabile di stato per la gestione dei messaggi in arrivo
     const [arrivalMessage,setArrivalMessage] = useState([]);
+
     const scrollRef = useRef();
 
-    // Retrives all message in the chat
+    // Preleva i messaggi vecchi con l'utente selezionato
     const getAllMessages = async() => {
         const token = await getAccessTokenSilently();
         await axios({method: 'post', url: BASE_URL + '/getAllMsgs', 
@@ -29,11 +35,13 @@ const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notificati
         });
     }
 
+    // Invocato quando cambia l'utente selezionato
     useEffect(() => {
         getAllMessages();
-    }, [currentChat])
+    }, [currentChat]);
 
-    // Create a new message in the db
+    // Memorizza nuovo messaggio nel db(Mongo)
+    // Il from è estratto dal token.
     const createMessage = async(msg) => {
         const token = await getAccessTokenSilently();
 
@@ -50,33 +58,36 @@ const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notificati
         });
     }
 
-    // Send message
-    const handleSendMsg = async(msg) => {
+    const handleSendMsg = (msg) => {
 
-        // Stores message
+        //Salva msg nel db
         createMessage(msg);
 
-        // Update contact view
+        // Invia msg tramite socket
         socket.current.emit('send-msg', {
             from: currentUser.id,
             to: currentChat.id,
             message: msg,
         });
 
-
-        // Update user view
         const msgs = [...messages];
         msgs.push({fromSelf:true, message:msg});
         setMessages(msgs);
     }
 
-    // Receive message
+    // Invocato al montaggio del componente, al cambio del contatto selezionato
+    // e per ogni nuova notifica( altrimenti non sarebbe possibile aggiornate notification )
     useEffect(() => {
         if(socket.current) {
+
             socket.current.on("msg-receive", (data) => {
+
+                // Se il messaggio ricevuto riguarda la chat attuale
                 if(data.from === currentChat.id) {
+                    // Mostra nuovo messaggio all'utente
                     setArrivalMessage({fromSelf: false, message: data.message});
                 } else {
+                    // Aggiorna le notifiche degli altri contatti
                     var new_notifications = {...notifications};
                     if(notifications[data.from]) {
                         new_notifications[data.from] = new_notifications[data.from] + 1;
@@ -86,20 +97,20 @@ const ChatContainer = ({currentChat, currentUser, socket, notifyUser, notificati
                         notifyUser(new_notifications); 
                     }
                 }
+
             });
 
             return () => {
                 socket.current.off('msg-receive');
             }
-        }
-    },[currentChat, notifications]);
 
-    // Update new message
+        }
+    }, [currentChat, notifications]);
+
     useEffect(() => {
         arrivalMessage && setMessages((prev) => [...prev,arrivalMessage]);
     }, [arrivalMessage]);
 
-    // Update scroll view
     useEffect(() => {
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);

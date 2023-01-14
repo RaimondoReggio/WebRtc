@@ -13,15 +13,16 @@ const Header = ({currentSelection}) => {
     
     const [current_section, setCurrentSection] = useState(undefined);
 
-
     useEffect(()=>{
+
         setCurrentSection(currentSelection);
+
     },[]);
 
     const handleChangeSection = async(path) => {
-        //setCurrentSection(index);
 
         navigate(path);
+
     }
 
     return (
@@ -76,9 +77,6 @@ const Header = ({currentSelection}) => {
                         </a>
                     </li>
                     
-                    
-
-
                 </ul>
 
                 </div>

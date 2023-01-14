@@ -3,18 +3,19 @@ import Axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
+// Utilizzato per verificare se l'utente ha completato la registrazione dei dati profilo(Mongo)
+// viene utilizzato una sola volta dopo il login su Auth0. 
 const WaitingRoom = () => {
     const { getAccessTokenSilently } = useAuth0();
     const navigate = useNavigate();
 
-    // API Base Url
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
     useEffect(() => {
         alreadyReagister();
     }, []);
 
-    // Check if user sign up or sign is the first time
+    // Controlla se l'utente è già registrato tramite API.
     const alreadyReagister = async() => {
         const token = await getAccessTokenSilently();
 
@@ -30,7 +31,6 @@ const WaitingRoom = () => {
             }
         })
     };
-
 
     return (
         <div className="loading-container row align-items-center justify-content-center" style={{height: '100vh'}}>

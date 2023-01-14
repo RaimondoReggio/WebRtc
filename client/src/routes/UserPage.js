@@ -12,21 +12,19 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 
+// Componente utilizzato per visualizzare i dati del profilo utente e modificarli
+
 let goal_index = 0;
 let hobbie_index = 0;
 
 const Profile = () => {
 
-    // User data Auth0
     const { user } = useAuth0();
-
-    // Server API url
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
-    // Gets token
     const {getAccessTokenSilently} = useAuth0();
 
-    // User variables
+    // Variabili utente
     const [avatar_image, setAvatarImage] = useState();
     const [username, setUsername] = useState();
     const [biography, setBiography] = useState();
@@ -41,7 +39,6 @@ const Profile = () => {
     const [points, setPoints] = useState();
     const { email } = user;
 
-    // Goals variables
     const [goal_items, setGoalItems] = useState(['travel', 'study']);
     const [goal1, setGoal1] = useState('');
     const [goal2, setGoal2] = useState('');
@@ -49,8 +46,7 @@ const Profile = () => {
     const [goal4, setGoal4] = useState('');
     const [new_goal, setNewGoal] = useState('');
     const inputRefGoals = useRef(null);
-
-    // Hobbies variables 
+ 
     const [hobbie_items, setHobbieItems] = useState(['play', 'party']);
     const [hobbie1, setHobbie1] = useState('');
     const [hobbie2, setHobbie2] = useState('');
@@ -59,11 +55,11 @@ const Profile = () => {
     const [new_hobbie, setNewHobbie] = useState('');
     const inputRefHobbies = useRef(null);
 
-    // Edit variables 
+    // Variabile di stato per pasare alla modalità Edit
     const [edit_mode, setEditMode] = useState(false);
     const dateFormat = 'YYYY/MM/DD';
 
-    // Retrives all user data
+    // Preleva i dati dell'utente tramite API
     const getUserData = async() => {
         const token = await getAccessTokenSilently();
         await Axios.get(BASE_URL+'/getUserData', {
@@ -92,13 +88,13 @@ const Profile = () => {
                 setHobbie2(response.data.hobbies[1]);
                 setHobbie3(response.data.hobbies[2]);
                 setHobbie4(response.data.hobbies[3]);
+                
             }
         });
     };
 
-    // Update a new user on click on submit buttom 
+    // Modifica dati utente tramite API
     const updateUser = async() => {
-        
         const token = await getAccessTokenSilently();
 
         await axios({method: 'post', url: BASE_URL + '/updateUserProfile', 

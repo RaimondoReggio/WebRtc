@@ -17,25 +17,24 @@ import avatar8 from '../assets/avatar/user8.svg';
 import avatar9 from '../assets/avatar/user9.svg';
 import SlickSlider from '../general/carousel';
 
+// Componente utilizzato per effettuare la registrazione dell'utente
+// con relativi dati, preferenze, lingue, goal, hobbie
+
 let goal_index = 0;
 let hobbie_index = 0;
 
 function Register() {
 
-    // API Base Url
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
-
-    // Step variable
     const [step, setStep] = useState(0);
 
-    // Steps description
     const description = 'This is a description.';
 
     const [slider_index, setSliderIndex] = useState();
 
     const avatar_array = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9];
 
-    // User variables
+    // Variabili utente
     const [first_name, setFirstName] = useState('');
     const [last_name, setLasttName] = useState('');
     const [username, setUsername] = useState('');
@@ -48,7 +47,6 @@ function Register() {
     const [biography, setBiography] = useState(''); 
     const [avatar_image, setAvatarImage] = useState('https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp');
 
-    // Goals variables
     const [goal_items, setGoalItems] = useState(['travel', 'study']);
     const [goal1, setGoal1] = useState('');
     const [goal2, setGoal2] = useState('');
@@ -57,7 +55,6 @@ function Register() {
     const [new_goal, setNewGoal] = useState('');
     const inputRefGoals = useRef(null);
 
-    // Hobbies variables 
     const [hobbie_items, setHobbieItems] = useState(['play', 'party']);
     const [hobbie1, setHobbie1] = useState('');
     const [hobbie2, setHobbie2] = useState('');
@@ -66,7 +63,7 @@ function Register() {
     const [new_hobbie, setNewHobbie] = useState('');
     const inputRefHobbies = useRef(null);
 
-    // Alert function
+
     const [messageApi, contextHolder] = message.useMessage();
 
     const error = () => {
@@ -75,14 +72,11 @@ function Register() {
             content: 'Some fields are empty. Fill in all fields please.',
         });
     };
-
-    // Takes token function
     const { getAccessTokenSilently, user} = useAuth0();
 
-    // Takes navigate function
     const navigate = useNavigate();
 
-    // Check if user is already registered
+    // Controlla tramite API se l'utente ha già terminato la registrazione dei dati profilo
     const checkIfUserExist = async() => {
         const token = await getAccessTokenSilently();
         
@@ -101,7 +95,7 @@ function Register() {
         checkIfUserExist();
     })
 
-    // Create a new user on click on submit buttom 
+    // Completa la registrazione dell'utente nel db tramite API
     const createUser = async() => {
         
         const token = await getAccessTokenSilently();
@@ -133,7 +127,7 @@ function Register() {
         });
     }
 
-    // Save data and go to next step
+    // Gestisce pulsante next
     const handleNext = () => {
         if(step === 0) {
             if(first_name && last_name && username && native_l && new_l && gender && birth_date && birth_country && job && biography) {
@@ -147,19 +141,13 @@ function Register() {
         }
     }
 
+    // Gestisce pulsante back
     const handleBack = () => {
         if(step === 1) {
             setStep(0);
         } else if (step === 2) {
             setStep(1);
         }
-    }
-
-    // Set avatar 
-    const changeAvatar = (event) => {
-        var imageUrl = event.target.getAttribute('src');
-
-        setAvatarImage(imageUrl);
     }
 
     const addItemGoal = (e) => {

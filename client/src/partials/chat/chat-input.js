@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
+// Componente utilizzato per comporre messaggi da inviare(TextInput)
+
 const ChatInput = ({handleSendMsg}) => {
 
     const [msg, setMsg] = useState("");
@@ -9,6 +11,7 @@ const ChatInput = ({handleSendMsg}) => {
     const sendMsg = (event) => {
         event.preventDefault();
         if(msg.length > 0) {
+            // Callback al componente Chat
             handleSendMsg(msg);
             setMsg('');
         }

@@ -1,35 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import Header from "../general/header";
 import Content from "../general/content";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faVenusMars, faCakeCandles, faEarthAmerica, faHouseUser, faBriefcase} from "@fortawesome/free-solid-svg-icons";
-import {Select, Input, Button, DatePicker, Steps, Avatar, Divider, Space, message } from "antd";
-import TextArea from 'antd/es/input/TextArea';
+import { faVenusMars, faCakeCandles, faEarthAmerica, faBriefcase} from "@fortawesome/free-solid-svg-icons";
 import Axios from "axios";
 import axios from "axios";
-import dayjs from 'dayjs';
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-import { useNavigate } from 'react-router-dom';
-dayjs.extend(customParseFormat);
+// Componente utilizzato per visualizzare i dati del profilo di un altro utente
 
-let goal_index = 0;
-let hobbie_index = 0;
+const StrangerPage = () => {
 
-const Profile = () => {
-
-    // User data Auth0
-    const { user } = useAuth0();
-
-    // Server API url
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
-    // Gets token
     const {getAccessTokenSilently} = useAuth0();
 
-    // User variables
+    // Variabili utente
     const [avatar_image, setAvatarImage] = useState();
     const [username, setUsername] = useState();
     const [biography, setBiography] = useState();
@@ -42,18 +29,13 @@ const Profile = () => {
     const [native_l, setNative_l] = useState();
     const [new_l, setNew_l] = useState();
     const [points, setPoints] = useState();
-    const [ email, setEmail ] = useState();
+    const [email, setEmail] = useState();
 
-    // Goals variables
-    const [goal_items, setGoalItems] = useState(['travel', 'study']);
     const [goal1, setGoal1] = useState('');
     const [goal2, setGoal2] = useState('');
     const [goal3, setGoal3] = useState('');
     const [goal4, setGoal4] = useState('');
 
-
-    // Hobbies variables 
-    const [hobbie_items, setHobbieItems] = useState(['play', 'party']);
     const [hobbie1, setHobbie1] = useState('');
     const [hobbie2, setHobbie2] = useState('');
     const [hobbie3, setHobbie3] = useState('');
@@ -63,14 +45,10 @@ const Profile = () => {
 
     const location = useLocation();
 
-    // get userId
+    // Preleva userId Auth0 dell'utente di cui si vuole visualizzare il profilo
     let userId = location.state.userId;
 
-
-    // Edit variables 
-    const dateFormat = 'YYYY/MM/DD';
-
-    // Retrives all user data
+    // Preleva le informazioni dell'utente tramite API
     const getStrangerData = async() => {
         const token = await getAccessTokenSilently();
         await Axios.get(BASE_URL+'/getStrangerData', {
@@ -112,10 +90,12 @@ const Profile = () => {
         getStrangerData();
     },[]);
 
+    // Invocata quando si decide di avviare una conversazione con il nuovo contatto
     const handleClick = async() => {
         
         const token = await getAccessTokenSilently();
 
+        // L'utente viene aggiunto come nuovo contatto 
         await axios({method: 'post', url: BASE_URL + '/addContact', 
             headers: {'Authorization': `Bearer ${token}`}, 
             params : {
@@ -315,4 +295,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default StrangerPage;

@@ -11,10 +11,14 @@ const Auth0ProviderWithHistory = ({ children }) => {
   
     const navigate = useNavigate();
   
+    // Viene invocata dopo il login tramite Auth0
     const onRedirectCallback = () => {
       navigate('/waiting');
     };
-  
+    
+    // Viene utilizzato per gestire lo stato di autenticazione dell'utente
+    // deve contentere il componente principale App (root), in modo tale che
+    // le funzionalità di Auth0 siano integrate in tutto il progetto.
     return (
       <Auth0Provider
         domain={domain}

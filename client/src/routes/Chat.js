@@ -6,18 +6,22 @@ import Content from "../general/content";
 import Header from "../general/header";
 import Contacts from "../partials/chat/contacts";
 import ChatContainer from "../partials/chat/chat-container";
-import {message } from "antd";
+import { message } from "antd";
 
 function Chat() {
     const BASE_URL = process.env.REACT_APP_SERVER_URL;
 
-    const socket = useRef();
-
     const {getAccessTokenSilently} = useAuth0();
 
+    const socket = useRef();
+
+    // currentUser è l'utente loggato
     const [currentUser,setCurrentUser] = useState();
+    // Lista di contatti
     const [contacts,setContacts]= useState([]);
+    // currentChat indica la chat selezionata
     const [currentChat,setCurrentChat] = useState();
+
     const [newMessages, setNewMessages] = useState([]);
 
     const [messageApi, contextHolder] = message.useMessage();
@@ -29,15 +33,17 @@ function Chat() {
             duration: duration,
         });
     };
+    
 
-    // Execute getUserData on mounting
     useEffect(() => {
-
-        // Check if user data are in local storage and retrive all data
+        // Preleva o aggiorna i dati dell'utente dal localStorage
         const getUserData = async() => {
+
+            // Controlla se i dati dell'utente sono già nel localStorage
             if(!localStorage.getItem("user-data")) {
                 const token = await getAccessTokenSilently();
                 
+                //Preleva dati utente tramite API
                 await Axios.get(BASE_URL+'/getUserData', {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -53,6 +59,7 @@ function Chat() {
                             new_l: response.data.new_l,
                         }
                         console.log(response.data.user_id);
+                        // Aggiorna localStorage
                         localStorage.setItem('user-data', JSON.stringify(user_data));
                         setCurrentUser(user_data);
                     }
@@ -63,11 +70,12 @@ function Chat() {
         }
 
         getUserData();
+
     }, []);
 
+    // Invocata quando i dati dell'utente sono stati caricati
     useEffect(() => {
-
-        // Get all user contacts
+        // Preleva i contatti dell'utente tramite API
         const getAllContacts = async() => {
             const token = await getAccessTokenSilently();
 
@@ -85,6 +93,8 @@ function Chat() {
             });
         };
 
+        // Inizializza connessione alla socket.io\chat 
+        // per la chat tra utenti
         const openSocket = async()=>{
             const token = await getAccessTokenSilently();
             socket.current = io(BASE_URL, 
@@ -93,6 +103,7 @@ function Chat() {
                     extraHeaders: { Authorization: `Bearer ${token}`}
                 }
                 );
+            // Per aggiungere l'utente alla lista deli utenti online
             socket.current.emit("add-user",currentUser.id);
         };
 
@@ -104,12 +115,13 @@ function Chat() {
 
     }, [currentUser]);
 
-    // Change current chat
+    // Callback richiamata dal componente Contacts
     const handleChatChange = (chat) =>{
         setCurrentChat(chat)
     }
-
-    // Change newMessages list
+    // Callback richiamata dal componente 
+    // ChatContaier per segnalare nuova notifica
+    // Contacts per azzerare le notifiche quando si cambia utente
     const handleMessagesChange = (new_messages) => {
         setNewMessages(new_messages);
     }
@@ -126,7 +138,6 @@ function Chat() {
                         <div className="col-md-4 contacts-column d-flex align-items-center justify-content-center">
                             <div className="card">
                                 <div className="card-body">
-                                    
                                     <Contacts contacts={contacts} currentUser={currentUser} changeChat={handleChatChange} notifications={newMessages} notifyUser={handleMessagesChange}/>
                                 </div>
                             </div>
@@ -134,7 +145,7 @@ function Chat() {
                         <div className="col-md-8 chat-column">
                             {currentChat===undefined?
                                 <h2>Welcome</h2>:
-                                <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} notifyUser={handleMessagesChange} notifications={newMessages}/>
+                                <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} notifications={newMessages} notifyUser={handleMessagesChange} />
                             }
                         </div>
                     </div>

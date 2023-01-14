@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 
+// Componente che serve per renderizzare i contatti all'interno del componente Chat
+
 const Contacts = ({contacts, currentUser, changeChat, notifications, notifyUser}) => {
 
-    // State variables
+    // Per current si intende l'utente loggato
     const[currentUserName,setCurrentUserName] = useState(undefined);
     const[currentUserImage,setCurrentUserImage] = useState(undefined);
     const [currentSelected,setCurrentSelected] = useState(undefined);
 
+
+    //DA CONTROLLARE, MAI USATO
     useEffect(() => {
         if(currentUser) {
             setCurrentUserName(currentUser.username);
@@ -14,14 +18,18 @@ const Contacts = ({contacts, currentUser, changeChat, notifications, notifyUser}
         }
     }, [currentUser]);
 
-    // Change selected chat
+    // Richiamata quando si seleziona utente dalla lista contatti
     const changeCurrentChat = (index, contact) => {
         setCurrentSelected(index);
+
+        //Callback al componente Chat
         changeChat(contact);
 
-        if(notifications[contact.id]) {
+        // Elimina le notifiche per l'utente selezionato
+        if(notifications[contact.id]) { 
             var new_notifications = {...notifications};
             delete new_notifications[contact.id];
+            // Callback al componente chat
             notifyUser(new_notifications); 
         }
     }
