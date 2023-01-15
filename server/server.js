@@ -296,13 +296,15 @@ io.on("connection",(socket)=>{
             //room è auth0 id mandato dal client
             //se gli id corrispondono e non esiste già una stanza creata dall'utente
             if(room===socket.realUserId && !broadcasters[room]){
+                socket.join(room);
+
                 console.trace("register as broadcaster for room " + room + ", native_l " + native_l);
                 broadcasters[room] = {socketId: socket.id,
                              native_l: native_l, roomName: roomName, roomDescr:roomDescr};
                 socket.isBroadcaster = true;
                 socket.room = room;
 
-                socket.join(room); 
+                 
                 countLiveUsers[room] = 0;
             }
           });
@@ -320,10 +322,9 @@ io.on("connection",(socket)=>{
                         console.trace("nun ten sord " + socket.realUserId);
                     }else{
                         
+                        socket.join(user.room);
                         socket.isViewer = true;
                         console.trace("register as viewer for room", user.room);
-                
-                        socket.join(user.room);
                         user.id = socket.id; //id socket
                         socket.room = user.room;
         
@@ -352,9 +353,16 @@ io.on("connection",(socket)=>{
             }
             
           });
-        
+          
+          //invocata sia da viewer che broadcaster
           socket.on("candidate", function (id, event) {
-            socket.to(id).emit("candidate", socket.id, event);
+            if(socket.isViewer && broadcasters[socket.room].socketId === id){ //sto inviando al broadcaster della stanza scelta all'inizio
+                socket.to(id).emit("candidate", socket.id, event);
+            }else if(socket.isBroadcaster && liveUsers[socket.room].some(obj => obj.id === id)){//sto inviando ad un viewer nella mia stanza
+                socket.to(id).emit("candidate", socket.id, event);
+            }
+            
+            
           });
         
           //broadcaster client invia offer a viewer
@@ -363,7 +371,10 @@ io.on("connection",(socket)=>{
           socket.on("offer", function (id, event) {
             //const clientsInRoom = await io.in(roomName).allSockets()
             //controllare se id sta nella stanza detta
-            if(event.broadcaster.room === socket.room){ //se il broadcast sta facendo un offerta per la sua stanza
+
+            if(socket.isBroadcaster && event.broadcaster.room === socket.room //se il broadcast sta facendo un offerta per la sua stanza
+                && liveUsers[socket.room].some(obj => obj.id === id)){ //se l'utente a cui si vuole mandare l'offer ne aveva fatto richiesta
+
                 event.broadcaster.id = socket.id;
                 socket.to(id).emit("offer", event.broadcaster, event.sdp);
             }
@@ -372,14 +383,14 @@ io.on("connection",(socket)=>{
         
           //viewer client invia answer al broadcaster
           //scatta nel socket viewer e lo gira al client broadcaster
-          socket.on("answer", function (event) {
+          socket.on("answer", function (event) { //si può mandare answer solo al broadcaster della stanza in cui si sta
             if(socket.isViewer && socket.room===event.room){
                 //incrementa counter stanza
                 countLiveUsers[socket.room] = countLiveUsers[socket.room] + 1;
 
                 //console.trace(event.room); da undifined
-                console.trace(broadcasters[event.room]);
-                socket.to(broadcasters[event.room].socketId).emit("answer", socket.id, event.sdp);
+                console.trace(broadcasters[socket.room]);
+                socket.to(broadcasters[socket.room].socketId).emit("answer", socket.id, event.sdp);
             }
           });
         

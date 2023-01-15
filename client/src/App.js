@@ -19,6 +19,7 @@ function App() {
 
   const { isLoading } = useAuth0();
   
+  // Loading autenticazione Auth0
   if (isLoading) {
     return <Loading></Loading>
   }
