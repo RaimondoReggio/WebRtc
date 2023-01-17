@@ -8,6 +8,10 @@ client.connect();
 
 const database = client.db("talk-to-learn");
 
+// Modulo che definisce le interazioni base con MongoDB
+// questo verrà importato tramite require() quindi il modulo
+// verrà caricato una sola volta, usando sempre la stessa connessione con MongoDB
+
 const findOneDocument = async (coll, query, options) => {
 
     try {

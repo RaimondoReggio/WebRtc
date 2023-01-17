@@ -1,14 +1,10 @@
-const { MongoClient, Timestamp } = require('mongodb');
-
-const uri = "mongodb+srv://user:user@cluster0.fmsue0z.mongodb.net/?retryWrites=true&w=majority";
-
-const client = new MongoClient(uri);
-
-client.connect();
-
 const {findOneDocument, findDocuments, insertOneDocument, insertDocuments, updateOneDocument, updateDocuments, replaceDocument, deleteOneDocument, deleteDocuments, countDocuments} = require('./CRUD');
 
+// Modulo che implementa le funzioni di base per gestire il database
 
+//user_id fà riferimento Auth0.sub auth0|xxxxxx..
+
+// Controlla se un utente già esiste
 const checkIfUserExist = async (user_id) => {
     const coll = "users";
 
@@ -30,6 +26,8 @@ const checkIfUserExist = async (user_id) => {
     }
 }
 
+
+// Crea utente
 const createUser = async (user_id, first_name, last_name, username, native_l, new_l, gender, birth_date, birth_country, job, biography, avatar_image, email, goals, hobbies) => {
     const coll = "users";
 
@@ -106,6 +104,7 @@ const updateUserProfile = async (user_id, first_name, last_name, username, nativ
     }
 }
 
+// Preleva informazioni complete relative ad un utente
 const getUserData = async (user_id) => {
     const coll = "users";
 
@@ -127,6 +126,7 @@ const getUserData = async (user_id) => {
     }
 }
 
+// Preleva informazioni di base relative a più utenti
 const getUsersInfo = async(users_id) =>{
     const coll = "users";
     
@@ -159,9 +159,9 @@ const getUsersInfo = async(users_id) =>{
     }
 }
 
+// Preleva i contatti associati ad un utente(campo memorizzato)
 const getContacts = async (user_id) => {
     const coll = "users";
-
 
     try {
 
@@ -172,7 +172,6 @@ const getContacts = async (user_id) => {
             projection: { user_id: 1, contacts: 1 }
         }
 
-        //Forse inserire email
         const result_ = await findOneDocument(coll, query_, options);
         console.log(result_);
         if(result_.contacts){
@@ -210,6 +209,7 @@ const getContacts = async (user_id) => {
 
 }
 
+// Aggiunge un contatto alla lista di un utente
 const addContact = async (user_id, contact_id) => {
 
     const coll = "users";
@@ -236,7 +236,7 @@ const addContact = async (user_id, contact_id) => {
         console.error(e);
     }
 }
-
+// Preleva gli utenti compatibili con un certo utente in base alle lingue
 const getPossibleUsers = async (user_id) => {
     user_info = await getUserData(user_id);
 
@@ -259,7 +259,6 @@ const getPossibleUsers = async (user_id) => {
     }
 
     try {
-        //Forse inseire email
         const result = await findDocuments(coll, query);
 
         if(result) {
@@ -344,6 +343,8 @@ const getAllMessages = async (from_id, to_id) => {
 
 }
 
+// Le ultime due funzionalità servono per ridurre ed incrementare
+// il punteggio di un utente(utilizzati per le Live)
 const reduceUserPoints = async (user_id) => {
     const coll = "users";
     const options = {
@@ -356,7 +357,7 @@ const reduceUserPoints = async (user_id) => {
         const result = await findOneDocument(coll, query, options);
         console.log("reduceUserPoints " + user_id +", "+ result.points);
         console.log("reduceUserPoints " + result);
-        if(result.points >=9.9 ) { //s po fa
+        if(result.points >=9.9 ) {
             const document = {
                 $inc: {
                     points: -10,

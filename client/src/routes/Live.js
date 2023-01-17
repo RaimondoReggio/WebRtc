@@ -169,10 +169,6 @@ function Live(){
           //dato che il listener .on(liveMsg) viene registrato in useEffect, 
           //la lista messages sarà quella del momento in cui viene usato useEffect e non quella aggiornata
         });
-            
-        /*
-            BROAD       VIEWER
-        */
 
         // VIEWER => BROADCASTER (1)
         // Evento inviato dal Viewer ed invocato sul client Broadcaster

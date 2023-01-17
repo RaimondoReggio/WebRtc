@@ -1,7 +1,8 @@
 const { expressjwt: jwt } = require("express-jwt");
 const jwks = require('jwks-rsa');
 
-
+// Modulo utilizzato per validare il JWT
+// il secret è conservato da Auth0, si accede tramite il .json
 const jwtCheck = jwt({
     secret: jwks.expressJwtSecret({
         cache: true,
