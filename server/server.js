@@ -5,12 +5,18 @@ const jwks = require('jwks-rsa');
 const jwt = require('jsonwebtoken');
 const socketioJwt = require('socketio-jwt');
 
-const http = require('http');
+const http = require('https');
 const express = require('express');
 const cors = require('cors');
+var fs = require('fs');
 const socket = require("socket.io");
 
 const port = 4000;
+
+var privateKey  = fs.readFileSync('./certificate/key.pem');
+var certificate = fs.readFileSync('./certificate/certificate.pem');
+
+var credentials = {key: privateKey, cert: certificate};
 
 // Istanzia app express
 const app = express();
@@ -19,19 +25,23 @@ app.use(express.urlencoded({extended: true}));
 
 app.use(
     cors({
-      origin: 'https://talk-to-learn.vercel.app',
+      origin: 'https://localhost:3000',
       methods: ["GET", "POST"],
       credentials: true,
     })
 );
 
 // Istanzia server 
-const server = http.createServer(app);
+const server = http.createServer(credentials, app);
+
+server.listen(port ,()=>{
+    console.trace(`Server connected successfully on Port  ${port}.`);
+});
 
 // Istanzia socket.io
 const io = socket(server,{
     cors:{
-       origin: 'https://talk-to-learn.vercel.app',
+       origin: 'https://localhost:3000',
         Credential:true,     
     }}
 );
@@ -457,9 +467,5 @@ io.on("connection",(socket)=>{
 
     }
     
-});
-
-server.listen(port ,()=>{
-    console.trace(`Server connected successfully on Port  ${port}.`);
 });
  
