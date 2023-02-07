@@ -45,8 +45,6 @@ app.use(jwtCheck, function (err, req, res, next) {
     }
 });
 
-
-
 // Checks if user exist
 app.get('/checkIfUserExist', async(req, res) => {
     const user_id = req.auth.sub;
