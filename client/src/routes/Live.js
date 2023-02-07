@@ -70,24 +70,24 @@ function Live(){
     // Configurazione iceServers, indica i servizi STUN e TURN da utilizzare a RTCPeerConnection
     const config = {
       iceServers: [
-        {
-          urls: "stun:relay.metered.ca:80",
-        },
-        {
-          urls: "turn:relay.metered.ca:80",
-          username: "0f42426ece9c4d709251c1cb",
-          credential: "xwd/lSd6Neqdkg04",
-        },
-        {
-          urls: "turn:relay.metered.ca:443",
-          username: "0f42426ece9c4d709251c1cb",
-          credential: "xwd/lSd6Neqdkg04",
-        },
-        {
-          urls: "turn:relay.metered.ca:443?transport=tcp",
-          username: "0f42426ece9c4d709251c1cb",
-          credential: "xwd/lSd6Neqdkg04",
-        },
+          {
+            urls: "stun:relay.metered.ca:80",
+          },
+          {
+            urls: "turn:relay.metered.ca:80",
+            username: "bd6fda260208d0cfd53581f5",
+            credential: "LIPQ4UGF2Fs8lE45",
+          },
+          {
+            urls: "turn:relay.metered.ca:443",
+            username: "bd6fda260208d0cfd53581f5",
+            credential: "LIPQ4UGF2Fs8lE45",
+          },
+          {
+            urls: "turn:relay.metered.ca:443?transport=tcp",
+            username: "bd6fda260208d0cfd53581f5",
+            credential: "LIPQ4UGF2Fs8lE45",
+          },
       ],
     };
     
