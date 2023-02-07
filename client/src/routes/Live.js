@@ -72,24 +72,24 @@ function Live(){
   
   const config = {
     iceServers: [
-        {
-          urls: "stun:relay.metered.ca:80",
-        },
-        {
-          urls: "turn:relay.metered.ca:80",
-          username: "bd6fda260208d0cfd53581f5",
-          credential: "LIPQ4UGF2Fs8lE45",
-        },
-        {
-          urls: "turn:relay.metered.ca:443",
-          username: "bd6fda260208d0cfd53581f5",
-          credential: "LIPQ4UGF2Fs8lE45",
-        },
-        {
-          urls: "turn:relay.metered.ca:443?transport=tcp",
-          username: "bd6fda260208d0cfd53581f5",
-          credential: "LIPQ4UGF2Fs8lE45",
-        },
+      {
+        urls: "stun:relay.metered.ca:80",
+      },
+      {
+        urls: "turn:relay.metered.ca:80",
+        username: "bd6fda260208d0cfd53581f5",
+        credential: "LIPQ4UGF2Fs8lE45",
+      },
+      {
+        urls: "turn:relay.metered.ca:443",
+        username: "bd6fda260208d0cfd53581f5",
+        credential: "LIPQ4UGF2Fs8lE45",
+      },
+      {
+        urls: "turn:relay.metered.ca:443?transport=tcp",
+        username: "bd6fda260208d0cfd53581f5",
+        credential: "LIPQ4UGF2Fs8lE45",
+      },
     ],
   };
   const streamConstraints = {  audio: true, video: { height: 480 } };
