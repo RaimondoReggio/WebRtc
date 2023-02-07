@@ -7,10 +7,10 @@ const jwtCheck = jwt({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: 'https://dev-bswl63fq86v48oa2.eu.auth0.com/.well-known/jwks.json'
+        jwksUri: 'https://dev-ipebb6rgmf8hkbyz.us.auth0.com/.well-known/jwks.json'
   }),
   audience: 'https://nodejs/api',
-  issuer: 'https://dev-bswl63fq86v48oa2.eu.auth0.com/',
+  issuer: 'https://dev-ipebb6rgmf8hkbyz.us.auth0.com/',
   algorithms: ['RS256']
 });
 
