@@ -255,7 +255,7 @@ const Profile = () => {
                                 <div className="col-md-6">
                                 <div className="card card-goals mb-4 mb-md-0">
                                     <div className="card-body">
-                                        <p className="mb-4">Why I want to learn a new language</p>
+                                        <p className="mb-4">Why do I want to learn a new language?</p>
                                         { !goal1 && !goal2 && !goal3 && !goal4 &&
                                         <h4 className="no-item-message">No goal chosen</h4>
                                         }
@@ -299,7 +299,7 @@ const Profile = () => {
                                     <div className="card-body">
                                     <p className="mb-4">Hobbies</p>
                                     { !hobbie1 && !hobbie2 && !hobbie3 && !hobbie4 &&
-                                    <h4 className="no-item-message">No hobbie chosen</h4>
+                                    <h4 className="no-item-message">No hobbies chosen</h4>
                                     }
                                     { hobbie1 && 
                                     <>
@@ -544,7 +544,7 @@ const Profile = () => {
                                 <div className="col-md-6">
                                 <div className="card mb-4 mb-md-0">
                                     <div className="card-body">
-                                        <p className="mb-4">Why I want to learn a new language</p>
+                                        <p className="mb-4">Why do I want to learn a new language?</p>
                                         <div className='form-outline mb-4'>
                                             <Select
                                             style={{width: '100%'}}
